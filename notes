@@ -1,0 +1,30 @@
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import { log } from "console";
+import { userInfo } from "os";
+import { agent } from "supertest";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyBrw_yFMjK0633tKEa03WaXpgD-wfxtrFA",
+  authDomain: "e-commerce-af2d8.firebaseapp.com",
+  projectId: "e-commerce-af2d8",
+  storageBucket: "e-commerce-af2d8.firebasestorage.app",
+  messagingSenderId: "289514873715",
+  appId: "1:289514873715:web:f1f944090e20c1c77bdb06",
+  measurementId: "G-WGX36MTXDD"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+
+
+// plan
+// add pagination on get requests
+// invoice printing
+// how to assign shipping charges
