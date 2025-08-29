@@ -8,7 +8,7 @@ import { ResponseModule } from './response/response.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ProductsModule } from './products/products.module';
 import { CartModule } from './cart/cart.module';
-import { CheckOutModule } from './checkout/checkout.module';
+import { RazorpayModule } from './razorpay/razorpay.module';
 import { CouponModule } from './coupouns/coupouns.module';
 import { NotificationsModule } from './firebase/notifications.module';
 import { WishlistModule } from './wishlist/wishlist.module';
@@ -30,7 +30,7 @@ import { WishlistModule } from './wishlist/wishlist.module';
     NotificationsModule,
     WishlistModule,
 
-    CheckOutModule.forRootAsync()
+    RazorpayModule.forRootAsync()
   ],
 })
 export class AppModule { }

@@ -7,50 +7,50 @@ export declare class WishlistService {
     constructor(prisma: PrismaService);
     addToWishlist(dto: CreateWishlistDto, userId: string): Promise<{
         product: {
-            name: string;
             id: string;
             createdAt: Date;
             updatedAt: Date;
+            name: string;
             categoryName: string;
             discountedPrice: import("@prisma/client/runtime/library").Decimal;
             actualPrice: import("@prisma/client/runtime/library").Decimal;
-            stockCount: number;
             description: string | null;
+            stockCount: number;
             isStock: boolean;
         };
     } & {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        customerProfileId: string;
         productId: string;
+        customerProfileId: string;
     }>;
     getWishlist(userId: string, pagination: PaginationDto): Promise<PaginationResponseDto<{
         product: {
-            name: string;
             id: string;
             createdAt: Date;
             updatedAt: Date;
+            name: string;
             categoryName: string;
             discountedPrice: import("@prisma/client/runtime/library").Decimal;
             actualPrice: import("@prisma/client/runtime/library").Decimal;
-            stockCount: number;
             description: string | null;
+            stockCount: number;
             isStock: boolean;
         };
     } & {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        customerProfileId: string;
         productId: string;
+        customerProfileId: string;
     }>>;
     removeFromWishlist(id: string, userId: string): Promise<{
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        customerProfileId: string;
         productId: string;
+        customerProfileId: string;
     }>;
     clearWishlist(userId: string): Promise<import(".prisma/client").Prisma.BatchPayload>;
 }

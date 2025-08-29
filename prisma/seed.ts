@@ -1,198 +1,142 @@
-// import { PrismaClient } from '@prisma/client';
-// import * as bcrypt from 'bcrypt';
+import { PrismaClient, Roles, PaymentMethod, OrderStatus, PaymentStatus } from '@prisma/client';
+import { faker } from '@faker-js/faker';
 
-// const prisma = new PrismaClient();
+const prisma = new PrismaClient();
 
-// async function main() {
-//   // Create roles
-//   const adminRole = await prisma.role.upsert({
-//     where: { name: 'admin' },
-//     update: {},
-//     create: { name: 'admin' },
-//   });
+async function main() {
+    console.log('🌱 Seeding database...');
 
-//   const staffRole = await prisma.role.upsert({
-//     where: { name: 'staff' },
-//     update: {},
-//     create: { name: 'staff' },
-//   });
+    // ----- USERS -----
+    for (let i = 0; i < 5; i++) {
+        const user = await prisma.user.create({
+            data: {
+                email: faker.internet.email(),
+                password: faker.internet.password(),
+                role: Roles.CUSTOMER,
+                CustomerProfile: {
+                    create: {
+                        name: faker.person.fullName(),
+                        phone: faker.phone.number(),
+                        address: faker.location.streetAddress(),
+                        city: faker.location.city(),
+                        state: faker.location.state(),
+                        postalCode: faker.location.zipCode(),
+                        country: faker.location.country(),
+                        profilePicture: faker.image.avatar(),
+                    },
+                },
+            },
+        });
 
-//   const customerRole = await prisma.role.upsert({
-//     where: { name: 'customer' },
-//     update: {},
-//     create: { name: 'customer' },
-//   });
+        console.log(`Created user: ${user.email}`);
+    }
 
-//   // Create admin user
-//   const hashedPassword = await bcrypt.hash('password@123', 10);
-//   await prisma.user.upsert({
-//     where: { email: 'admin@ecommerce.com' },
-//     update: {},
-//     create: {
-//       email: 'admin@ecommerce.com',
-//       name: 'Admin User',
-//       password: hashedPassword,
-//       role: { connect: { id: adminRole.id } },
-//       status: 'active',
-//     },
-//   });
+    // ----- ADMIN -----
+    const admin = await prisma.user.create({
+        data: {
+            email: 'admin@example.com',
+            password: 'admin123',
+            role: Roles.SUPER_ADMIN,
+            AdminProfile: {
+                create: {
+                    name: 'Super Admin',
+                    phone: faker.phone.number(),
+                },
+            },
+        },
+    });
 
-//   // Create customer user
-//   const customerPassword = await bcrypt.hash('customer123', 10);
-//   await prisma.user.upsert({
-//     where: { email: 'customer@example.com' },
-//     update: {},
-//     create: {
-//       email: 'customer@example.com',
-//       name: 'John Customer',
-//       password: customerPassword,
-//       role: { connect: { id: customerRole.id } },
-//       status: 'active',
-//     },
-//   });
+    console.log(`Created admin: ${admin.email}`);
 
-//   // Create categories
-//   const electronicsCategory = await prisma.category.upsert({
-//     where: { id: 'electronics-cat-id' },
-//     update: {},
-//     create: {
-//       id: 'electronics-cat-id',
-//       name: 'Electronics',
-//       description: 'Electronic devices and gadgets',
-//       isActive: true,
-//     },
-//   });
+    // ----- PRODUCTS -----
+    for (let i = 0; i < 10; i++) {
+        const product = await prisma.product.create({
+            data: {
+                name: faker.commerce.productName(),
+                categoryName: faker.commerce.department(),
+                discountedPrice: faker.number.float({ min: 100, max: 500, fractionDigits: 2 }),
+                actualPrice: faker.number.float({ min: 500, max: 1000, fractionDigits: 2 }),
+                description: faker.commerce.productDescription(),
+                stockCount: faker.number.int({ min: 10, max: 100 }),
+                isStock: true,
+                images: {
+                    create: [
+                        {
+                            url: faker.image.url(),
+                            altText: faker.commerce.productAdjective(),
+                            isMain: true,
+                        },
+                    ],
+                },
+            },
+        });
 
-//   const clothingCategory = await prisma.category.upsert({
-//     where: { id: 'clothing-cat-id' },
-//     update: {},
-//     create: {
-//       id: 'clothing-cat-id',
-//       name: 'Clothing',
-//       description: 'Fashion and apparel',
-//       isActive: true,
-//     },
-//   });
+        console.log(`Created product: ${product.name}`);
+    }
 
-//   const booksCategory = await prisma.category.upsert({
-//     where: { id: 'books-cat-id' },
-//     update: {},
-//     create: {
-//       id: 'books-cat-id',
-//       name: 'Books',
-//       description: 'Books and literature',
-//       isActive: true,
-//     },
-//   });
+    // ----- COUPONS -----
+    for (let i = 0; i < 3; i++) {
+        await prisma.coupon.create({
+            data: {
+                couponName: `DISCOUNT${i + 1}`,
+                ValueType: i % 2 === 0 ? 'percentage' : 'amount',
+                Value: i % 2 === 0 ? '10' : '200',
+                minimumSpent: 1000,
+                usageLimitPerPerson: 1,
+                validFrom: '2025-01-01',
+                ValidTill: '2025-12-31',
+            },
+        });
+    }
 
-//   // Create sample products
-//   const products = [
-//     {
-//       name: 'iPhone 15 Pro',
-//       description: 'Latest iPhone with advanced features',
-//       price: 999.99,
-//       sku: 'IPHONE15PRO',
-//       categoryId: electronicsCategory.id,
-//       isFeatured: true,
-//       images: [
-//         {
-//           url: 'https://example.com/iphone15pro.jpg',
-//           altText: 'iPhone 15 Pro',
-//           isMain: true,
-//           sortOrder: 0,
-//         },
-//       ],
-//       inventory: {
-//         quantity: 50,
-//         reserved: 0,
-//       },
-//     },
-//     {
-//       name: 'MacBook Air M2',
-//       description: 'Powerful laptop with M2 chip',
-//       price: 1199.99,
-//       sku: 'MACBOOKAIRM2',
-//       categoryId: electronicsCategory.id,
-//       isFeatured: true,
-//       images: [
-//         {
-//           url: 'https://example.com/macbookair.jpg',
-//           altText: 'MacBook Air M2',
-//           isMain: true,
-//           sortOrder: 0,
-//         },
-//       ],
-//       inventory: {
-//         quantity: 30,
-//         reserved: 0,
-//       },
-//     },
-//     {
-//       name: 'Classic T-Shirt',
-//       description: 'Comfortable cotton t-shirt',
-//       price: 29.99,
-//       sku: 'TSHIRT001',
-//       categoryId: clothingCategory.id,
-//       images: [
-//         {
-//           url: 'https://example.com/tshirt.jpg',
-//           altText: 'Classic T-Shirt',
-//           isMain: true,
-//           sortOrder: 0,
-//         },
-//       ],
-//       inventory: {
-//         quantity: 100,
-//         reserved: 0,
-//       },
-//     },
-//     {
-//       name: 'JavaScript: The Good Parts',
-//       description: 'Essential JavaScript programming book',
-//       price: 24.99,
-//       sku: 'JSBOOK001',
-//       categoryId: booksCategory.id,
-//       images: [
-//         {
-//           url: 'https://example.com/jsbook.jpg',
-//           altText: 'JavaScript Book',
-//           isMain: true,
-//           sortOrder: 0,
-//         },
-//       ],
-//       inventory: {
-//         quantity: 75,
-//         reserved: 0,
-//       },
-//     },
-//   ];
+    // ----- SAMPLE ORDER -----
+    const customer = await prisma.customerProfile.findFirst();
+    const product = await prisma.product.findFirst();
 
-//   for (const productData of products) {
-//     const { images, inventory, ...product } = productData;
+    if (customer && product) {
+        const order = await prisma.order.create({
+            data: {
+                orderNumber: `ORD-${Date.now()}`,
+                status: OrderStatus.confirmed,
+                paymentStatus: PaymentStatus.completed,
+                totalAmount: product.discountedPrice,
+                shippingCost: 50,
+                taxAmount: 18,
+                discountAmount: 0,
+                CustomerProfile: {
+                    connect: { id: customer.id },
+                },
+                items: {
+                    create: [
+                        {
+                            product: { connect: { id: product.id } },
+                            quantity: 2,
+                            discountedPrice: product.discountedPrice,
+                            actualPrice: product.actualPrice,
+                        },
+                    ],
+                },
+                Payment: {
+                    create: {
+                        amount: product.discountedPrice,
+                        method: PaymentMethod.credit_card,
+                        status: PaymentStatus.completed,
+                        transactionId: faker.string.uuid(),
+                    },
+                },
+            },
+        });
 
-//     await prisma.product.upsert({
-//       where: { sku: product.sku },
-//       update: {},
-//       create: {
-//         ...product,
-//         images: {
-//           create: images,
-//         },
-//         inventory: {
-//           create: inventory,
-//         },
-//       },
-//     });
-//   }
+        console.log(`Created sample order: ${order.orderNumber}`);
+    }
 
-//   console.log('Database seeded successfully!');
-// }
+    console.log('✅ Seeding completed!');
+}
 
-// main()
-//   .catch((e) => {
-//     console.error(e);
-//     process.exit(1);
-//   })
-//   .finally(async () => {
-//     await prisma.$disconnect();
-//   });
+main()
+    .then(() => prisma.$disconnect())
+    .catch(async (e) => {
+        console.error(e);
+        await prisma.$disconnect();
+        process.exit(1);
+    });

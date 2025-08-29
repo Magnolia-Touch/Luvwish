@@ -16,6 +16,7 @@ import { PaginationDto } from 'src/pagination/dto/pagination.dto';
 import { RolesGuard } from 'src/common/guards/roles.guard';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { SearchFilterDto } from 'src/pagination/dto/search-filter.dto';
 
 @Controller('products')
 export class ProductsController {
@@ -31,8 +32,8 @@ export class ProductsController {
   }
 
   @Get()
-  findAll(@Query() pagination: PaginationDto) {
-    return this.productsService.findAll(pagination);
+  findAll(@Query() query: SearchFilterDto) {
+    return this.productsService.findAll(query);
   }
 
   // 🔹 Get single product

@@ -4,6 +4,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { PaginationDto } from 'src/pagination/dto/pagination.dto';
 import { PaginationResponseDto } from 'src/pagination/pagination-response.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { SearchFilterDto } from 'src/pagination/dto/search-filter.dto';
 
 @Injectable()
 export class ProductsService {
@@ -31,19 +32,40 @@ export class ProductsService {
     });
   }
 
-  async findAll(pagination: PaginationDto) {
+  async findAll(query: SearchFilterDto) {
+    const { search, category, minPrice, maxPrice, skip, limit, page } = query;
+
+    // common where condition
+    const where = {
+      AND: [
+        search
+          ? {
+            OR: [
+              { name: { contains: search, mode: 'insensitive' } },
+              { description: { contains: search, mode: 'insensitive' } },
+            ],
+          }
+          : {},
+        category ? { category: category } : {},
+        minPrice ? { price: { gte: +minPrice } } : {},
+        maxPrice ? { price: { lte: +maxPrice } } : {},
+      ],
+    };
+
     const [data, total] = await this.prisma.$transaction([
       this.prisma.product.findMany({
+        where,
         include: { images: true },
         orderBy: { createdAt: 'desc' },
-        skip: pagination.skip,
-        take: pagination.limit,
+        skip,
+        take: limit,
       }),
-      this.prisma.product.count(),
+      this.prisma.product.count({ where }),
     ]);
 
-    return new PaginationResponseDto(data, total, pagination.page, pagination.limit);
+    return new PaginationResponseDto(data, total, page, limit);
   }
+
 
   // 🔹 Get product by ID
   async findOne(id: string) {

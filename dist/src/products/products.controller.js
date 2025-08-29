@@ -17,10 +17,10 @@ const common_1 = require("@nestjs/common");
 const products_service_1 = require("./products.service");
 const create_product_dto_1 = require("./dto/create-product.dto");
 const jwt_auth_guard_1 = require("../common/guards/jwt-auth.guard");
-const pagination_dto_1 = require("../pagination/dto/pagination.dto");
 const roles_guard_1 = require("../common/guards/roles.guard");
 const roles_decorator_1 = require("../common/decorators/roles.decorator");
 const update_product_dto_1 = require("./dto/update-product.dto");
+const search_filter_dto_1 = require("../pagination/dto/search-filter.dto");
 let ProductsController = class ProductsController {
     constructor(productsService) {
         this.productsService = productsService;
@@ -28,8 +28,8 @@ let ProductsController = class ProductsController {
     create(createProductDto) {
         return this.productsService.create(createProductDto);
     }
-    findAll(pagination) {
-        return this.productsService.findAll(pagination);
+    findAll(query) {
+        return this.productsService.findAll(query);
     }
     findOne(id) {
         return this.productsService.findOne(id);
@@ -56,7 +56,7 @@ __decorate([
     (0, common_1.Get)(),
     __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [pagination_dto_1.PaginationDto]),
+    __metadata("design:paramtypes", [search_filter_dto_1.SearchFilterDto]),
     __metadata("design:returntype", void 0)
 ], ProductsController.prototype, "findAll", null);
 __decorate([

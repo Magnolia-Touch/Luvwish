@@ -16,7 +16,7 @@ const response_module_1 = require("./response/response.module");
 const schedule_1 = require("@nestjs/schedule");
 const products_module_1 = require("./products/products.module");
 const cart_module_1 = require("./cart/cart.module");
-const checkout_module_1 = require("./checkout/checkout.module");
+const razorpay_module_1 = require("./razorpay/razorpay.module");
 const coupouns_module_1 = require("./coupouns/coupouns.module");
 const notifications_module_1 = require("./firebase/notifications.module");
 const wishlist_module_1 = require("./wishlist/wishlist.module");
@@ -40,7 +40,7 @@ exports.AppModule = AppModule = __decorate([
             coupouns_module_1.CouponModule,
             notifications_module_1.NotificationsModule,
             wishlist_module_1.WishlistModule,
-            checkout_module_1.CheckOutModule.forRootAsync()
+            razorpay_module_1.RazorpayModule.forRootAsync()
         ],
     })
 ], AppModule);

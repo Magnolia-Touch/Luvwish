@@ -36,17 +36,34 @@ let ProductsService = class ProductsService {
             include: { images: true },
         });
     }
-    async findAll(pagination) {
+    async findAll(query) {
+        const { search, category, minPrice, maxPrice, skip, limit, page } = query;
+        const where = {
+            AND: [
+                search
+                    ? {
+                        OR: [
+                            { name: { contains: search, mode: 'insensitive' } },
+                            { description: { contains: search, mode: 'insensitive' } },
+                        ],
+                    }
+                    : {},
+                category ? { category: category } : {},
+                minPrice ? { price: { gte: +minPrice } } : {},
+                maxPrice ? { price: { lte: +maxPrice } } : {},
+            ],
+        };
         const [data, total] = await this.prisma.$transaction([
             this.prisma.product.findMany({
+                where,
                 include: { images: true },
                 orderBy: { createdAt: 'desc' },
-                skip: pagination.skip,
-                take: pagination.limit,
+                skip,
+                take: limit,
             }),
-            this.prisma.product.count(),
+            this.prisma.product.count({ where }),
         ]);
-        return new pagination_response_dto_1.PaginationResponseDto(data, total, pagination.page, pagination.limit);
+        return new pagination_response_dto_1.PaginationResponseDto(data, total, page, limit);
     }
     async findOne(id) {
         const product = await this.prisma.product.findUnique({
