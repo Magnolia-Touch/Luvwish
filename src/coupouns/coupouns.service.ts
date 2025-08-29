@@ -6,7 +6,7 @@ import { HttpStatus } from '@nestjs/common';
 
 @Injectable()
 export class CouponService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   // Add coupon
   async create(dto: CreateCouponDto) {
@@ -20,13 +20,12 @@ export class CouponService {
     const coupons = await this.prisma.coupon.findMany({
       orderBy: { createdAt: 'desc' },
     });
-    return coupons.filter(coupon => {
+    return coupons.filter((coupon) => {
       const validFrom = new Date(coupon.validFrom);
       const validTo = new Date(coupon.ValidTill);
       return validFrom <= now && validTo >= now;
     });
   }
-
 
   // Get single coupon
   async findOne(id: string) {
@@ -52,12 +51,12 @@ export class CouponService {
     });
   }
 
-
   async findApplicableCoupons(profile_id: string) {
     // check if the user is new (no orders yet)
-    const newUser = (await this.prisma.order.count({
-      where: { customerProfileId: profile_id },
-    })) === 0;
+    const newUser =
+      (await this.prisma.order.count({
+        where: { customerProfileId: profile_id },
+      })) === 0;
 
     // get all coupons (no `is_valid` in schema, so we check validity by dates)
     const now = new Date();
@@ -97,7 +96,11 @@ export class CouponService {
   }
 
   // 2. Apply a coupon
-  async applyCoupon(profile_id: string, coupon_id: string, orderAmount?: number) {
+  async applyCoupon(
+    profile_id: string,
+    coupon_id: string,
+    orderAmount?: number,
+  ) {
     const now = new Date();
 
     // find coupon
@@ -126,7 +129,9 @@ export class CouponService {
     });
 
     if (usageCount >= coupon.usageLimitPerPerson) {
-      throw new Error('You have reached the maximum usage limit for this coupon');
+      throw new Error(
+        'You have reached the maximum usage limit for this coupon',
+      );
     }
 
     // check minimum spent requirement
@@ -161,6 +166,4 @@ export class CouponService {
       status: HttpStatus.OK,
     };
   }
-
-
 }

@@ -2,11 +2,7 @@ import { Injectable, HttpStatus } from '@nestjs/common';
 
 @Injectable()
 export class ResponseService {
-  successResponse(
-    message: string,
-    data?: any,
-    pagination?: any,
-  ) {
+  successResponse(message: string, data?: any, pagination?: any) {
     return {
       status: true,
       message,

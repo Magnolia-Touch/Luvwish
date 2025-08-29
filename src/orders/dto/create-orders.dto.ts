@@ -1,4 +1,11 @@
-import { IsString, IsOptional, IsUUID, IsEnum, IsNumber, ValidateNested } from 'class-validator';
+import {
+  IsString,
+  IsOptional,
+  IsUUID,
+  IsEnum,
+  IsNumber,
+  ValidateNested,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 import { OrderStatus, PaymentStatus } from '@prisma/client';
 import { CreateOrderItemDto } from './create-order-item.dto';
@@ -47,5 +54,3 @@ export class CreateOrderDto {
   @Type(() => CreateOrderItemDto)
   items: CreateOrderItemDto[];
 }
-
-

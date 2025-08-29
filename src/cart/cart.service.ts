@@ -1,11 +1,15 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { AddToCartDto } from './dto/add-to-cart.dto';
 import { UpdateCartDto } from './dto/update-cart-item.dto';
 
 @Injectable()
 export class CartService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async addToCart(userId: string, addToCartDto: AddToCartDto) {
     const { productId, quantity } = addToCartDto;
@@ -69,10 +73,12 @@ export class CartService {
     };
   }
 
-
   async getCart(userId: string) {
-    const customerProfile = await this.prisma.customerProfile.findUnique({ where: { userId } });
-    if (!customerProfile) throw new NotFoundException('Customer profile not found');
+    const customerProfile = await this.prisma.customerProfile.findUnique({
+      where: { userId },
+    });
+    if (!customerProfile)
+      throw new NotFoundException('Customer profile not found');
 
     return this.prisma.cartItem.findMany({
       where: { customerProfileId: customerProfile.id },
@@ -80,11 +86,20 @@ export class CartService {
     });
   }
 
-  async updateCartItem(userId: string, cartItemId: string, updateCartDto: UpdateCartDto) {
-    const customerProfile = await this.prisma.customerProfile.findUnique({ where: { userId } });
-    if (!customerProfile) throw new NotFoundException('Customer profile not found');
+  async updateCartItem(
+    userId: string,
+    cartItemId: string,
+    updateCartDto: UpdateCartDto,
+  ) {
+    const customerProfile = await this.prisma.customerProfile.findUnique({
+      where: { userId },
+    });
+    if (!customerProfile)
+      throw new NotFoundException('Customer profile not found');
 
-    const cartItem = await this.prisma.cartItem.findUnique({ where: { id: cartItemId } });
+    const cartItem = await this.prisma.cartItem.findUnique({
+      where: { id: cartItemId },
+    });
     if (!cartItem || cartItem.customerProfileId !== customerProfile.id) {
       throw new NotFoundException('Cart item not found');
     }
@@ -100,10 +115,15 @@ export class CartService {
   }
 
   async removeFromCart(userId: string, cartItemId: string) {
-    const customerProfile = await this.prisma.customerProfile.findUnique({ where: { userId } });
-    if (!customerProfile) throw new NotFoundException('Customer profile not found');
+    const customerProfile = await this.prisma.customerProfile.findUnique({
+      where: { userId },
+    });
+    if (!customerProfile)
+      throw new NotFoundException('Customer profile not found');
 
-    const cartItem = await this.prisma.cartItem.findUnique({ where: { id: cartItemId } });
+    const cartItem = await this.prisma.cartItem.findUnique({
+      where: { id: cartItemId },
+    });
     if (!cartItem || cartItem.customerProfileId !== customerProfile.id) {
       throw new NotFoundException('Cart item not found');
     }

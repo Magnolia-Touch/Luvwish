@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Request, UseGuards, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Request,
+  UseGuards,
+  Query,
+} from '@nestjs/common';
 import { CouponService } from './coupouns.service';
 import { CreateCouponDto } from './dto/create-coupon.dto';
 import { UpdateCouponDto } from './dto/update-coupon.dto';
@@ -8,10 +19,10 @@ import { Roles } from 'src/common/decorators/roles.decorator';
 
 @Controller('coupons')
 export class CouponController {
-  constructor(private readonly couponService: CouponService) { }
+  constructor(private readonly couponService: CouponService) {}
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles("ADMIN")
+  @Roles('ADMIN')
   @Post()
   create(@Body() dto: CreateCouponDto) {
     return this.couponService.create(dto);
@@ -30,7 +41,7 @@ export class CouponController {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles("ADMIN")
+  @Roles('ADMIN')
   @Patch(':id')
   update(@Param('id') id: string, @Body() dto: UpdateCouponDto) {
     return this.couponService.update(id, dto);
@@ -45,14 +56,14 @@ export class CouponController {
   @UseGuards(JwtAuthGuard)
   @Get('applicable-coupouns')
   findApplicableCoupons(@Request() req) {
-    const profile_id = req.user.customerProfile.id
+    const profile_id = req.user.customerProfile.id;
     return this.couponService.findApplicableCoupons(profile_id);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('apply-coupoun')
   applyCoupon(@Query('coupoun_id') coupoun_id: string, @Request() req) {
-    const user_id = req.user.id
+    const user_id = req.user.id;
     return this.couponService.applyCoupon(user_id, coupoun_id);
   }
 }

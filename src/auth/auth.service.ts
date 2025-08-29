@@ -3,7 +3,7 @@ import {
   UnauthorizedException,
   ConflictException,
   NotFoundException,
-  ForbiddenException
+  ForbiddenException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma/prisma.service';
@@ -20,7 +20,7 @@ export class AuthService {
     private readonly prisma: PrismaService,
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
-  ) { }
+  ) {}
 
   async validateUser(email: string, password: string): Promise<any> {
     const user = await this.prisma.user.findUnique({
@@ -73,7 +73,6 @@ export class AuthService {
       return await this.generateOtp(email);
     }
   }
-
 
   async generateToken(user: any) {
     const payload = {
@@ -143,7 +142,6 @@ export class AuthService {
     return this.generateToken(user);
   }
 
-
   async getAdminProfile(id: string, role: string) {
     if (role !== Roles.ADMIN) {
       throw new ForbiddenException('Profile cannot be accessed');
@@ -157,5 +155,4 @@ export class AuthService {
     }
     return this.usersService.CutomerProfile(id);
   }
-
 }

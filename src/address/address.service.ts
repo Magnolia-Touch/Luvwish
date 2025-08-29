@@ -1,22 +1,25 @@
-import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateAddressDto } from './dto/create-address.dto';
 import { UpdateAddressDto } from './dto/update-address.dto';
 
-
 @Injectable()
 export class AddressService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async create(createAddressDto: CreateAddressDto, profile_id: string) {
     const profile = await this.prisma.customerProfile.findUnique({
       where: { id: profile_id },
     });
     if (!profile) {
-      throw new NotFoundException("CustomerProfile Not Found")
+      throw new NotFoundException('CustomerProfile Not Found');
     }
     return this.prisma.address.create({
-      data: { ...createAddressDto, customerProfileId: profile_id }
+      data: { ...createAddressDto, customerProfileId: profile_id },
     });
   }
 
@@ -29,9 +32,12 @@ export class AddressService {
 
   async findOne(profile_id: string, id: string) {
     const address = await this.prisma.address.findUnique({ where: { id } });
-    if (!address) throw new NotFoundException(`Address with id ${id} not found`);
+    if (!address)
+      throw new NotFoundException(`Address with id ${id} not found`);
     if (address.customerProfileId !== profile_id) {
-      throw new ForbiddenException('You are not allowed to access this address');
+      throw new ForbiddenException(
+        'You are not allowed to access this address',
+      );
     }
     return address;
   }

@@ -5,8 +5,6 @@ import { OrdersModule } from 'src/orders/orders.module';
 import { OrdersService } from 'src/orders/orders.service';
 import { RazorpayService } from './razorpay.service';
 
-
-
 @Module({})
 export class RazorpayModule {
   static forRootAsync(): DynamicModule {

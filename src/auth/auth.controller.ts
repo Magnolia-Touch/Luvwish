@@ -10,7 +10,7 @@ import {
   Request,
   UseInterceptors,
   UploadedFile,
-  ForbiddenException
+  ForbiddenException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
@@ -27,7 +27,10 @@ import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService, private readonly userService: UsersService,) { }
+  constructor(
+    private readonly authService: AuthService,
+    private readonly userService: UsersService,
+  ) {}
 
   @Post('login')
   async login(@Body() loginDto: LoginDto) {
@@ -57,25 +60,23 @@ export class AuthController {
 
   @Get('profile')
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles("ADMIN")
+  @Roles('ADMIN')
   async getAdminProfile(@Request() req) {
-    const userId = req.user.id
-    const role = req.user.role
-    console.log(role)
+    const userId = req.user.id;
+    const role = req.user.role;
+    console.log(role);
     return this.authService.getAdminProfile(userId, role);
   }
-
 
   // 🔹 Customer profile
   @Get('customer/profile')
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles("CUSTOMER", "ADMIN")
+  @Roles('CUSTOMER', 'ADMIN')
   async getCustomerProfile(@Request() req) {
-    const userId = req.user.id
-    const role = req.user.role
+    const userId = req.user.id;
+    const role = req.user.role;
     return this.authService.getCustomerProfile(userId, role);
   }
-
 
   @UseGuards(JwtAuthGuard)
   @Post('profile')
@@ -101,15 +102,10 @@ export class AuthController {
     return this.userService.updateCustomerProfile(userId, data, image);
   }
 
-
   @UseGuards(JwtAuthGuard)
   @Patch('change-password')
-  async changePassword(
-    @Request() req,
-    @Body() dto: ChangePasswordDto,
-  ) {
+  async changePassword(@Request() req, @Body() dto: ChangePasswordDto) {
     const userId = req.user.id;
     return this.userService.changePassword(userId, dto);
   }
-
 }

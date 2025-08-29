@@ -1,15 +1,20 @@
-import { IsString, IsOptional, IsNumber, IsBoolean, IsEnum, Min } from 'class-validator'
-import { Type } from 'class-transformer'
+import {
+  IsString,
+  IsOptional,
+  IsNumber,
+  IsBoolean,
+  IsEnum,
+  Min,
+} from 'class-validator';
+import { Type } from 'class-transformer';
 import { CoupounValueType } from '@prisma/client';
-
-
 
 export class CreateCouponDto {
   @IsString()
   couponName: string;
 
   @IsEnum(CoupounValueType)
-  ValueType: CoupounValueType
+  ValueType: CoupounValueType;
 
   @IsString()
   Value: string;
@@ -37,5 +42,4 @@ export class CreateCouponDto {
 
   @IsString()
   ValidTill: string;
-
 }

@@ -4,7 +4,7 @@ import { WishlistController } from './wishlist.controller';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Module({
-    controllers: [WishlistController],
-    providers: [WishlistService, PrismaService],
+  controllers: [WishlistController],
+  providers: [WishlistService, PrismaService],
 })
-export class WishlistModule { }
+export class WishlistModule {}

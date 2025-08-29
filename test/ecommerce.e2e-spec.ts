@@ -76,9 +76,7 @@ describe('Ecommerce API (e2e)', () => {
 
   describe('Cart (requires auth)', () => {
     it('/v1/cart (GET) should require authentication', () => {
-      return request(app.getHttpServer())
-        .get('/v1/cart')
-        .expect(401);
+      return request(app.getHttpServer()).get('/v1/cart').expect(401);
     });
 
     it('/v1/cart (GET) with auth should return cart', () => {

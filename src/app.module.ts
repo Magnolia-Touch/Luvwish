@@ -30,7 +30,7 @@ import { WishlistModule } from './wishlist/wishlist.module';
     NotificationsModule,
     WishlistModule,
 
-    RazorpayModule.forRootAsync()
+    RazorpayModule.forRootAsync(),
   ],
 })
-export class AppModule { }
+export class AppModule {}

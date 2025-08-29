@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Query, Param, Delete, UseGuards, Request } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Query,
+  Param,
+  Delete,
+  UseGuards,
+  Request,
+} from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-orders.dto';
 import { UpdateOrderDto } from './dto/update-orders.dto';
@@ -9,10 +20,10 @@ import { RolesGuard } from 'src/common/guards/roles.guard';
 import { Roles } from 'src/common/decorators/roles.decorator';
 @Controller('orders')
 export class OrdersController {
-  constructor(private readonly ordersService: OrdersService) { }
+  constructor(private readonly ordersService: OrdersService) {}
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles("ADMIN")
+  @Roles('ADMIN')
   @Post()
   create(@Body() createOrderDto: CreateOrderDto) {
     return this.ordersService.create(createOrderDto);
@@ -21,10 +32,9 @@ export class OrdersController {
   @UseGuards(JwtAuthGuard)
   @Get()
   findAll(@Query() pagination: PaginationDto, @Request() req) {
-    const profile_id = req.user.customerProfile.id
+    const profile_id = req.user.customerProfile.id;
     return this.ordersService.findAll(pagination, profile_id);
   }
-
 
   @Get('user/:userId')
   findByUser(@Param('profile_id') profile_id: string) {
@@ -46,7 +56,6 @@ export class OrdersController {
     return this.ordersService.remove(id);
   }
 
-
   @Patch(':id/status')
   updateStatus(@Param('id') id: string, @Body('status') status: OrderStatus) {
     return this.ordersService.updateStatus(id, status);
@@ -60,5 +69,4 @@ export class OrdersController {
   ) {
     return this.ordersService.updateTrackingDetails(orderId, trackingDetails);
   }
-
 }

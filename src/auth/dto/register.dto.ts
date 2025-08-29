@@ -9,7 +9,6 @@ import {
 } from 'class-validator';
 
 export class RegisterDto {
-
   @IsEmail()
   @IsNotEmpty()
   email: string;
@@ -19,5 +18,3 @@ export class RegisterDto {
   @MinLength(8)
   password: string;
 }
-
-

@@ -8,7 +8,7 @@ import {
   Delete,
   UseGuards,
   Request,
-  Req
+  Req,
 } from '@nestjs/common';
 import { CartService } from './cart.service';
 import { AddToCartDto } from './dto/add-to-cart.dto';
@@ -18,12 +18,12 @@ import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 @Controller('cart')
 @UseGuards(JwtAuthGuard)
 export class CartController {
-  constructor(private readonly cartService: CartService) { }
+  constructor(private readonly cartService: CartService) {}
 
   @UseGuards(JwtAuthGuard)
   @Post('add')
   async addToCart(@Request() req, @Body() addToCartDto: AddToCartDto) {
-    const profile_id = req.user.id // Assuming JWT auth stores user in req.user
+    const profile_id = req.user.id; // Assuming JWT auth stores user in req.user
     return this.cartService.addToCart(profile_id, addToCartDto);
   }
 
@@ -36,7 +36,11 @@ export class CartController {
 
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
-  async updateCart(@Request() req, @Param('id') id: string, @Body() updateCartDto: UpdateCartDto) {
+  async updateCart(
+    @Request() req,
+    @Param('id') id: string,
+    @Body() updateCartDto: UpdateCartDto,
+  ) {
     const profile_id = req.user.id;
     return this.cartService.updateCartItem(profile_id, id, updateCartDto);
   }

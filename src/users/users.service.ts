@@ -2,7 +2,7 @@ import {
   Injectable,
   NotFoundException,
   ConflictException,
-  BadRequestException
+  BadRequestException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -13,7 +13,7 @@ import { ChangePasswordDto } from './dto/change-password.dto';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
   async createCustomer(createUserDto: CreateUserDto) {
     const { email, password } = createUserDto;
@@ -32,7 +32,6 @@ export class UsersService {
     const { password: _, ...result } = user;
     return result;
   }
-
 
   async createAdmin(createUserDto: CreateUserDto) {
     const { email, password } = createUserDto;
@@ -92,9 +91,9 @@ export class UsersService {
             reviews: true,
             couponUsages: true,
             orders: true,
-            cart: true
-          }
-        }
+            cart: true,
+          },
+        },
       },
     });
 
@@ -118,15 +117,14 @@ export class UsersService {
             profilePicture: true,
             notes: true,
             phone: true,
-          }
-        }
+          },
+        },
       },
     });
 
     if (!user) throw new NotFoundException(`User with ID ${id} not found`);
     return user;
   }
-
 
   //admin only
   async findByEmail(email: string) {
@@ -145,9 +143,9 @@ export class UsersService {
             reviews: true,
             couponUsages: true,
             orders: true,
-            cart: true
-          }
-        }
+            cart: true,
+          },
+        },
       },
     });
   }
@@ -198,7 +196,9 @@ export class UsersService {
     });
 
     if (!profile) {
-      throw new NotFoundException(`CustomerProfile for user ${userId} not found`);
+      throw new NotFoundException(
+        `CustomerProfile for user ${userId} not found`,
+      );
     }
 
     return this.prisma.customerProfile.update({
@@ -215,7 +215,6 @@ export class UsersService {
       },
     });
   }
-
 
   async changePassword(userId: string, dto: ChangePasswordDto) {
     const user = await this.prisma.user.findUnique({
@@ -237,5 +236,4 @@ export class UsersService {
       data: { password: hashed },
     });
   }
-
 }

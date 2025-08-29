@@ -3,7 +3,7 @@ import { randomBytes } from 'crypto';
 export function generateOrderNumber(prefix = 'ORD'): string {
   // Current timestamp in YYYYMMDDHHMMSS format
   const now = new Date();
-  const timestamp = 
+  const timestamp =
     now.getFullYear().toString() +
     String(now.getMonth() + 1).padStart(2, '0') +
     String(now.getDate()).padStart(2, '0') +
