@@ -6,7 +6,7 @@ import { HttpStatus } from '@nestjs/common';
 
 @Injectable()
 export class CouponService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   // Add coupon
   async create(dto: CreateCouponDto) {
@@ -15,7 +15,28 @@ export class CouponService {
     });
   }
 
-  async findAll() {
+  async findAllCoupons() {
+    const now = new Date();
+
+    const coupons = await this.prisma.coupon.findMany({
+      orderBy: { createdAt: 'desc' },
+    });
+
+    return coupons.map((coupon) => {
+      const validFrom = new Date(coupon.validFrom);
+      const validTill = new Date(coupon.ValidTill);
+
+      const isActive = validFrom <= now && validTill >= now;
+
+      return {
+        ...coupon,
+        status: isActive ? 'active' : 'inactive',
+      };
+    });
+  }
+
+
+  async findAllValidCoupouns() {
     const now = new Date();
     const coupons = await this.prisma.coupon.findMany({
       orderBy: { createdAt: 'desc' },

@@ -40,7 +40,7 @@ exports.AppModule = AppModule = __decorate([
             coupouns_module_1.CouponModule,
             notifications_module_1.NotificationsModule,
             wishlist_module_1.WishlistModule,
-            razorpay_module_1.RazorpayModule.forRootAsync()
+            razorpay_module_1.RazorpayModule.forRootAsync(),
         ],
     })
 ], AppModule);

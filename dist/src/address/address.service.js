@@ -21,10 +21,10 @@ let AddressService = class AddressService {
             where: { id: profile_id },
         });
         if (!profile) {
-            throw new common_1.NotFoundException("CustomerProfile Not Found");
+            throw new common_1.NotFoundException('CustomerProfile Not Found');
         }
         return this.prisma.address.create({
-            data: { ...createAddressDto, customerProfileId: profile_id }
+            data: { ...createAddressDto, customerProfileId: profile_id },
         });
     }
     async findAll(profile_id) {

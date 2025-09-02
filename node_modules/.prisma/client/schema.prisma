@@ -118,7 +118,7 @@ model Product {
   categoryName    String
   discountedPrice Decimal  @db.Decimal(10, 2)
   actualPrice     Decimal  @db.Decimal(10, 2)
-  description     String?
+  description     String?  @db.Text
   stockCount      Int      @default(0)
   isStock         Boolean  @default(true)
   createdAt       DateTime @default(now())

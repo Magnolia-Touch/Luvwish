@@ -27,8 +27,15 @@ let CouponController = class CouponController {
     create(dto) {
         return this.couponService.create(dto);
     }
-    findAll() {
-        return this.couponService.findAll();
+    async findAllCoupons(status) {
+        const coupons = await this.couponService.findAllCoupons();
+        if (status) {
+            return coupons.filter((coupon) => coupon.status === status);
+        }
+        return coupons;
+    }
+    findAllValidCoupons() {
+        return this.couponService.findAllValidCoupouns();
     }
     findOne(id) {
         return this.couponService.findOne(id);
@@ -51,7 +58,7 @@ let CouponController = class CouponController {
 exports.CouponController = CouponController;
 __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
-    (0, roles_decorator_1.Roles)("ADMIN"),
+    (0, roles_decorator_1.Roles)('ADMIN'),
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -60,10 +67,17 @@ __decorate([
 ], CouponController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
+    __param(0, (0, common_1.Query)('status')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], CouponController.prototype, "findAllCoupons", null);
+__decorate([
+    (0, common_1.Get)('valid-coupons'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
-], CouponController.prototype, "findAll", null);
+], CouponController.prototype, "findAllValidCoupons", null);
 __decorate([
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id')),
@@ -73,7 +87,7 @@ __decorate([
 ], CouponController.prototype, "findOne", null);
 __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
-    (0, roles_decorator_1.Roles)("ADMIN"),
+    (0, roles_decorator_1.Roles)('ADMIN'),
     (0, common_1.Patch)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),

@@ -19,7 +19,7 @@ import { Roles } from 'src/common/decorators/roles.decorator';
 
 @Controller('coupons')
 export class CouponController {
-  constructor(private readonly couponService: CouponService) {}
+  constructor(private readonly couponService: CouponService) { }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('ADMIN')
@@ -28,10 +28,21 @@ export class CouponController {
     return this.couponService.create(dto);
   }
 
-  // List
+
+  // GET /coupons
   @Get()
-  findAll() {
-    return this.couponService.findAll();
+  async findAllCoupons(@Query('status') status?: 'active' | 'inactive') {
+    const coupons = await this.couponService.findAllCoupons();
+    if (status) {
+      return coupons.filter((coupon) => coupon.status === status);
+    }
+    return coupons;
+  }
+
+  // List
+  @Get('valid-coupons')
+  findAllValidCoupons() {
+    return this.couponService.findAllValidCoupouns();
   }
 
   // Get one

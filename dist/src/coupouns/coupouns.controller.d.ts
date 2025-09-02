@@ -17,7 +17,21 @@ export declare class CouponController {
         validFrom: string;
         ValidTill: string;
     }>;
-    findAll(): Promise<{
+    findAllCoupons(status?: 'active' | 'inactive'): Promise<{
+        status: string;
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        couponName: string;
+        ValueType: import(".prisma/client").$Enums.CoupounValueType;
+        Value: string;
+        minimumSpent: import("@prisma/client/runtime/library").Decimal;
+        usedByCount: number;
+        usageLimitPerPerson: number;
+        validFrom: string;
+        ValidTill: string;
+    }[]>;
+    findAllValidCoupons(): Promise<{
         id: string;
         createdAt: Date;
         updatedAt: Date;

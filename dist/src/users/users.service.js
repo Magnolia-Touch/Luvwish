@@ -90,9 +90,9 @@ let UsersService = class UsersService {
                         reviews: true,
                         couponUsages: true,
                         orders: true,
-                        cart: true
-                    }
-                }
+                        cart: true,
+                    },
+                },
             },
         });
         if (!user)
@@ -114,8 +114,8 @@ let UsersService = class UsersService {
                         profilePicture: true,
                         notes: true,
                         phone: true,
-                    }
-                }
+                    },
+                },
             },
         });
         if (!user)
@@ -138,9 +138,9 @@ let UsersService = class UsersService {
                         reviews: true,
                         couponUsages: true,
                         orders: true,
-                        cart: true
-                    }
-                }
+                        cart: true,
+                    },
+                },
             },
         });
     }

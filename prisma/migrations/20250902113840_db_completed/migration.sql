@@ -62,7 +62,7 @@ CREATE TABLE `products` (
     `categoryName` VARCHAR(191) NOT NULL,
     `discountedPrice` DECIMAL(10, 2) NOT NULL,
     `actualPrice` DECIMAL(10, 2) NOT NULL,
-    `description` VARCHAR(191) NULL,
+    `description` TEXT NULL,
     `stockCount` INTEGER NOT NULL DEFAULT 0,
     `isStock` BOOLEAN NOT NULL DEFAULT true,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),

@@ -8,7 +8,7 @@ import { SearchFilterDto } from 'src/pagination/dto/search-filter.dto';
 
 @Injectable()
 export class ProductsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   // 🔹 Create product with multiple images
   async create(createProductDto: CreateProductDto) {
@@ -19,13 +19,13 @@ export class ProductsService {
         ...productData,
         images: images?.length
           ? {
-              create: images.map((img) => ({
-                url: img.url,
-                altText: img.altText,
-                isMain: img.isMain ?? false,
-                sortOrder: img.sortOrder ?? 0,
-              })),
-            }
+            create: images.map((img) => ({
+              url: img.url,
+              altText: img.altText,
+              isMain: img.isMain ?? false,
+              sortOrder: img.sortOrder ?? 0,
+            })),
+          }
           : undefined,
       },
       include: { images: true },
@@ -40,11 +40,12 @@ export class ProductsService {
       AND: [
         search
           ? {
-              OR: [
-                { name: { contains: search, mode: 'insensitive' } },
-                { description: { contains: search, mode: 'insensitive' } },
-              ],
-            }
+            OR: [
+              { name: { contains: search } },
+              { description: { contains: search } },
+            ],
+
+          }
           : {},
         category ? { category: category } : {},
         minPrice ? { price: { gte: +minPrice } } : {},
@@ -88,16 +89,16 @@ export class ProductsService {
         ...productData,
         ...(images
           ? {
-              images: {
-                deleteMany: {}, // remove old images
-                create: images.map((img) => ({
-                  url: img.url,
-                  altText: img.altText,
-                  isMain: img.isMain ?? false,
-                  sortOrder: img.sortOrder ?? 0,
-                })),
-              },
-            }
+            images: {
+              deleteMany: {}, // remove old images
+              create: images.map((img) => ({
+                url: img.url,
+                altText: img.altText,
+                isMain: img.isMain ?? false,
+                sortOrder: img.sortOrder ?? 0,
+              })),
+            },
+          }
           : {}),
       },
       include: { images: true },
