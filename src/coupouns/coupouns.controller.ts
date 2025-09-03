@@ -16,6 +16,8 @@ import { UpdateCouponDto } from './dto/update-coupon.dto';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/common/guards/roles.guard';
 import { Roles } from 'src/common/decorators/roles.decorator';
+import { query } from 'express';
+import { SearchFilterDto } from 'src/pagination/dto/search-filter.dto';
 
 @Controller('coupons')
 export class CouponController {
@@ -29,21 +31,21 @@ export class CouponController {
   }
 
 
-  // GET /coupons
   @Get()
-  async findAllCoupons(@Query('status') status?: 'active' | 'inactive') {
-    const coupons = await this.couponService.findAllCoupons();
-    if (status) {
-      return coupons.filter((coupon) => coupon.status === status);
-    }
-    return coupons;
+  async findAllCoupons(
+    @Query() query?: SearchFilterDto,
+  ) {
+    return this.couponService.findAllCoupons(query);
   }
 
-  // List
+  // GET /coupons/valid-coupons
   @Get('valid-coupons')
-  findAllValidCoupons() {
-    return this.couponService.findAllValidCoupouns();
+  async findAllValidCoupons(
+    @Query() query?: SearchFilterDto,
+  ) {
+    return this.couponService.findAllValidCoupons(query);
   }
+
 
   // Get one
   @Get(':id')

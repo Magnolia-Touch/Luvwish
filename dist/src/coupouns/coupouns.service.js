@@ -13,6 +13,7 @@ exports.CouponService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
 const common_2 = require("@nestjs/common");
+const pagination_response_dto_1 = require("../pagination/pagination-response.dto");
 let CouponService = class CouponService {
     constructor(prisma) {
         this.prisma = prisma;
@@ -22,31 +23,65 @@ let CouponService = class CouponService {
             data: dto,
         });
     }
-    async findAllCoupons() {
-        const now = new Date();
-        const coupons = await this.prisma.coupon.findMany({
-            orderBy: { createdAt: 'desc' },
-        });
-        return coupons.map((coupon) => {
-            const validFrom = new Date(coupon.validFrom);
-            const validTill = new Date(coupon.ValidTill);
-            const isActive = validFrom <= now && validTill >= now;
-            return {
-                ...coupon,
-                status: isActive ? 'active' : 'inactive',
-            };
-        });
+    async findAllCoupons(query) {
+        const { search, limit = 10, page = 1 } = query;
+        const skip = (page - 1) * limit;
+        const where = search
+            ? {
+                OR: [
+                    { couponName: { contains: search } },
+                    { Value: { contains: search } },
+                ],
+            }
+            : {};
+        const [coupons, total] = await this.prisma.$transaction([
+            this.prisma.coupon.findMany({
+                where,
+                orderBy: { createdAt: 'desc' },
+                skip,
+                take: limit,
+            }),
+            this.prisma.coupon.count({ where }),
+        ]);
+        return new pagination_response_dto_1.PaginationResponseDto(coupons, total, page, limit);
     }
-    async findAllValidCoupouns() {
-        const now = new Date();
-        const coupons = await this.prisma.coupon.findMany({
-            orderBy: { createdAt: 'desc' },
-        });
-        return coupons.filter((coupon) => {
-            const validFrom = new Date(coupon.validFrom);
-            const validTo = new Date(coupon.ValidTill);
-            return validFrom <= now && validTo >= now;
-        });
+    async findAllValidCoupons(query) {
+        const { search, page = 1, limit = 10 } = query;
+        const skip = (page - 1) * limit;
+        const where = {
+            AND: [
+                search
+                    ? {
+                        OR: [
+                            { couponName: { contains: search, mode: 'insensitive' } },
+                            { Value: { contains: search, mode: 'insensitive' } },
+                        ],
+                    }
+                    : {},
+                {
+                    validFrom: { lte: new Date().toISOString() },
+                },
+                {
+                    ValidTill: { gte: new Date().toISOString() },
+                },
+            ],
+        };
+        const [data, total] = await this.prisma.$transaction([
+            this.prisma.coupon.findMany({
+                where,
+                orderBy: { createdAt: 'desc' },
+                skip,
+                take: limit,
+            }),
+            this.prisma.coupon.count({ where }),
+        ]);
+        return {
+            data,
+            total,
+            page,
+            limit,
+            totalPages: Math.ceil(total / limit),
+        };
     }
     async findOne(id) {
         const coupon = await this.prisma.coupon.findUnique({ where: { id } });

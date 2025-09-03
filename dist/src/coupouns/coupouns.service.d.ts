@@ -2,6 +2,8 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCouponDto } from './dto/create-coupon.dto';
 import { UpdateCouponDto } from './dto/update-coupon.dto';
 import { HttpStatus } from '@nestjs/common';
+import { SearchFilterDto } from 'src/pagination/dto/search-filter.dto';
+import { PaginationResponseDto } from 'src/pagination/pagination-response.dto';
 export declare class CouponService {
     private prisma;
     constructor(prisma: PrismaService);
@@ -18,8 +20,7 @@ export declare class CouponService {
         validFrom: string;
         ValidTill: string;
     }>;
-    findAllCoupons(): Promise<{
-        status: string;
+    findAllCoupons(query: SearchFilterDto): Promise<PaginationResponseDto<{
         id: string;
         createdAt: Date;
         updatedAt: Date;
@@ -31,20 +32,30 @@ export declare class CouponService {
         usageLimitPerPerson: number;
         validFrom: string;
         ValidTill: string;
-    }[]>;
-    findAllValidCoupouns(): Promise<{
-        id: string;
-        createdAt: Date;
-        updatedAt: Date;
-        couponName: string;
-        ValueType: import(".prisma/client").$Enums.CoupounValueType;
-        Value: string;
-        minimumSpent: import("@prisma/client/runtime/library").Decimal;
-        usedByCount: number;
-        usageLimitPerPerson: number;
-        validFrom: string;
-        ValidTill: string;
-    }[]>;
+    }>>;
+    findAllValidCoupons(query: {
+        search?: string;
+        page?: number;
+        limit?: number;
+    }): Promise<{
+        data: {
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            couponName: string;
+            ValueType: import(".prisma/client").$Enums.CoupounValueType;
+            Value: string;
+            minimumSpent: import("@prisma/client/runtime/library").Decimal;
+            usedByCount: number;
+            usageLimitPerPerson: number;
+            validFrom: string;
+            ValidTill: string;
+        }[];
+        total: number;
+        page: number;
+        limit: number;
+        totalPages: number;
+    }>;
     findOne(id: string): Promise<{
         id: string;
         createdAt: Date;

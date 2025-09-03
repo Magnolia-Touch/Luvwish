@@ -37,20 +37,23 @@ let ProductsService = class ProductsService {
         });
     }
     async findAll(query) {
-        const { search, category, minPrice, maxPrice, skip, limit, page } = query;
+        const { search, limit = 10, page = 1, minPrice } = query;
+        const skip = (page - 1) * limit;
         const where = {
             AND: [
                 search
                     ? {
                         OR: [
-                            { name: { contains: search } },
-                            { description: { contains: search } },
+                            { name: { contains: search, mode: 'insensitive' } },
+                            { description: { contains: search, mode: 'insensitive' } },
                         ],
                     }
                     : {},
-                category ? { category: category } : {},
-                minPrice ? { price: { gte: +minPrice } } : {},
-                maxPrice ? { price: { lte: +maxPrice } } : {},
+                minPrice
+                    ? {
+                        discountedPrice: { lt: minPrice },
+                    }
+                    : {},
             ],
         };
         const [data, total] = await this.prisma.$transaction([

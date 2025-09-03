@@ -20,6 +20,7 @@ const update_coupon_dto_1 = require("./dto/update-coupon.dto");
 const jwt_auth_guard_1 = require("../common/guards/jwt-auth.guard");
 const roles_guard_1 = require("../common/guards/roles.guard");
 const roles_decorator_1 = require("../common/decorators/roles.decorator");
+const search_filter_dto_1 = require("../pagination/dto/search-filter.dto");
 let CouponController = class CouponController {
     constructor(couponService) {
         this.couponService = couponService;
@@ -27,15 +28,11 @@ let CouponController = class CouponController {
     create(dto) {
         return this.couponService.create(dto);
     }
-    async findAllCoupons(status) {
-        const coupons = await this.couponService.findAllCoupons();
-        if (status) {
-            return coupons.filter((coupon) => coupon.status === status);
-        }
-        return coupons;
+    async findAllCoupons(query) {
+        return this.couponService.findAllCoupons(query);
     }
-    findAllValidCoupons() {
-        return this.couponService.findAllValidCoupouns();
+    async findAllValidCoupons(query) {
+        return this.couponService.findAllValidCoupons(query);
     }
     findOne(id) {
         return this.couponService.findOne(id);
@@ -67,16 +64,17 @@ __decorate([
 ], CouponController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
-    __param(0, (0, common_1.Query)('status')),
+    __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [search_filter_dto_1.SearchFilterDto]),
     __metadata("design:returntype", Promise)
 ], CouponController.prototype, "findAllCoupons", null);
 __decorate([
     (0, common_1.Get)('valid-coupons'),
+    __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
+    __metadata("design:paramtypes", [search_filter_dto_1.SearchFilterDto]),
+    __metadata("design:returntype", Promise)
 ], CouponController.prototype, "findAllValidCoupons", null);
 __decorate([
     (0, common_1.Get)(':id'),

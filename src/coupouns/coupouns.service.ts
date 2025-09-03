@@ -3,6 +3,8 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCouponDto } from './dto/create-coupon.dto';
 import { UpdateCouponDto } from './dto/update-coupon.dto';
 import { HttpStatus } from '@nestjs/common';
+import { SearchFilterDto } from 'src/pagination/dto/search-filter.dto';
+import { PaginationResponseDto } from 'src/pagination/pagination-response.dto';
 
 @Injectable()
 export class CouponService {
@@ -15,37 +17,72 @@ export class CouponService {
     });
   }
 
-  async findAllCoupons() {
-    const now = new Date();
+  async findAllCoupons(query: SearchFilterDto) {
+    const { search, limit = 10, page = 1 } = query;
+    const skip = (page - 1) * limit;
 
-    const coupons = await this.prisma.coupon.findMany({
-      orderBy: { createdAt: 'desc' },
-    });
+    const where = search
+      ? {
+        OR: [
+          { couponName: { contains: search } },
+          { Value: { contains: search } },
+        ],
+      }
+      : {};
 
-    return coupons.map((coupon) => {
-      const validFrom = new Date(coupon.validFrom);
-      const validTill = new Date(coupon.ValidTill);
+    const [coupons, total] = await this.prisma.$transaction([
+      this.prisma.coupon.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take: limit,
+      }),
+      this.prisma.coupon.count({ where }),
+    ]);
 
-      const isActive = validFrom <= now && validTill >= now;
-
-      return {
-        ...coupon,
-        status: isActive ? 'active' : 'inactive',
-      };
-    });
+    return new PaginationResponseDto(coupons, total, page, limit);
   }
 
+  async findAllValidCoupons(query: { search?: string; page?: number; limit?: number }) {
+    const { search, page = 1, limit = 10 } = query;
+    const skip = (page - 1) * limit;
 
-  async findAllValidCoupouns() {
-    const now = new Date();
-    const coupons = await this.prisma.coupon.findMany({
-      orderBy: { createdAt: 'desc' },
-    });
-    return coupons.filter((coupon) => {
-      const validFrom = new Date(coupon.validFrom);
-      const validTo = new Date(coupon.ValidTill);
-      return validFrom <= now && validTo >= now;
-    });
+    const where = {
+      AND: [
+        search
+          ? {
+            OR: [
+              { couponName: { contains: search, mode: 'insensitive' } },
+              { Value: { contains: search, mode: 'insensitive' } },
+            ],
+          }
+          : {},
+        {
+          validFrom: { lte: new Date().toISOString() },
+        },
+        {
+          ValidTill: { gte: new Date().toISOString() },
+        },
+      ],
+    };
+
+    const [data, total] = await this.prisma.$transaction([
+      this.prisma.coupon.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take: limit,
+      }),
+      this.prisma.coupon.count({ where }),
+    ]);
+
+    return {
+      data,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    };
   }
 
   // Get single coupon

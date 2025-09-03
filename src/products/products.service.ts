@@ -33,23 +33,26 @@ export class ProductsService {
   }
 
   async findAll(query: SearchFilterDto) {
-    const { search, category, minPrice, maxPrice, skip, limit, page } = query;
+    const { search, limit = 10, page = 1, minPrice } = query;
 
-    // common where condition
-    const where = {
+    const skip = (page - 1) * limit;
+
+    // build where condition
+    const where: any = {
       AND: [
         search
           ? {
             OR: [
-              { name: { contains: search } },
-              { description: { contains: search } },
+              { name: { contains: search, mode: 'insensitive' } },
+              { description: { contains: search, mode: 'insensitive' } },
             ],
-
           }
           : {},
-        category ? { category: category } : {},
-        minPrice ? { price: { gte: +minPrice } } : {},
-        maxPrice ? { price: { lte: +maxPrice } } : {},
+        minPrice
+          ? {
+            discountedPrice: { lt: minPrice }, // ✅ filter by discountedPrice
+          }
+          : {},
       ],
     };
 
@@ -66,6 +69,8 @@ export class ProductsService {
 
     return new PaginationResponseDto(data, total, page, limit);
   }
+
+
 
   // 🔹 Get product by ID
   async findOne(id: string) {
