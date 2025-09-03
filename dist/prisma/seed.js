@@ -41,7 +41,84 @@ async function main() {
         },
     });
     console.log(`Created admin: ${admin.email}`);
-    for (let i = 0; i < 10; i++) {
+    const productsData = [
+        {
+            name: "Organic Cotton Sanitary Pads - Ultra Thin",
+            categoryName: "Women's Sanitary Items",
+            discountedPrice: 149,
+            actualPrice: 199,
+            stockCount: 500,
+            description: "Ultra-thin sanitary pads made from 100% organic cotton...",
+            isStock: true,
+            images: {
+                create: [
+                    { url: "https://example.com/images/sanitary-pad-front.jpg", altText: "Front view", isMain: true },
+                    { url: "https://example.com/images/sanitary-pad-packaging.jpg", altText: "Packaging", isMain: false },
+                ],
+            },
+        },
+        {
+            name: "Herbal Pantyliners - Daily Fresh",
+            categoryName: "Women's Sanitary Items",
+            discountedPrice: 79,
+            actualPrice: 99,
+            stockCount: 300,
+            description: "Pantyliners infused with natural herbal extracts...",
+            isStock: true,
+            images: {
+                create: [
+                    { url: "https://example.com/images/pantyliner-pack.jpg", altText: "Herbal pantyliner pack", isMain: true },
+                ],
+            },
+        },
+        {
+            name: "Overnight Sanitary Pads - XL",
+            categoryName: "Women's Sanitary Items",
+            discountedPrice: 199,
+            actualPrice: 249,
+            stockCount: 450,
+            description: "Extra-long sanitary pads for overnight protection...",
+            isStock: true,
+            images: {
+                create: [
+                    { url: "https://example.com/images/overnight-pad.jpg", altText: "Overnight pad pack", isMain: true },
+                ],
+            },
+        },
+        {
+            name: "Reusable Menstrual Cup - Medium",
+            categoryName: "Women's Sanitary Items",
+            discountedPrice: 499,
+            actualPrice: 699,
+            stockCount: 200,
+            description: "Eco-friendly menstrual cup made from medical-grade silicone...",
+            isStock: true,
+            images: {
+                create: [
+                    { url: "https://example.com/images/menstrual-cup.jpg", altText: "Menstrual cup", isMain: true },
+                ],
+            },
+        },
+        {
+            name: "Period Pain Relief Heat Patch",
+            categoryName: "Women's Sanitary Items",
+            discountedPrice: 199,
+            actualPrice: 249,
+            stockCount: 600,
+            description: "Self-heating patch for soothing period cramps...",
+            isStock: true,
+            images: {
+                create: [
+                    { url: "https://example.com/images/heat-patch.jpg", altText: "Heat patch pack", isMain: true },
+                ],
+            },
+        },
+    ];
+    for (const p of productsData) {
+        const product = await prisma.product.create({ data: p });
+        console.log(`Created fixed product: ${product.name}`);
+    }
+    for (let i = 0; i < 5; i++) {
         const product = await prisma.product.create({
             data: {
                 name: faker_1.faker.commerce.productName(),
@@ -62,21 +139,13 @@ async function main() {
                 },
             },
         });
-        console.log(`Created product: ${product.name}`);
+        console.log(`Created random product: ${product.name}`);
     }
-    for (let i = 0; i < 3; i++) {
-        await prisma.coupon.create({
-            data: {
-                couponName: `DISCOUNT${i + 1}`,
-                ValueType: i % 2 === 0 ? 'percentage' : 'amount',
-                Value: i % 2 === 0 ? '10' : '200',
-                minimumSpent: 1000,
-                usageLimitPerPerson: 1,
-                validFrom: '2025-01-01',
-                ValidTill: '2025-12-31',
-            },
-        });
-    }
+    const couponsData = [
+        { couponName: "WELCOME10", ValueType: client_1.CoupounValueType.percentage, Value: "10", minimumSpent: 500, usageLimitPerPerson: 1, validFrom: new Date("2025-01-01"), ValidTill: new Date("2025-12-31") },
+        { couponName: "SAVE200", ValueType: client_1.CoupounValueType.amount, Value: "200", minimumSpent: 1000, usageLimitPerPerson: 2, validFrom: new Date("2025-01-01"), ValidTill: new Date("2025-12-31") },
+        { couponName: "FREESHIP", ValueType: client_1.CoupounValueType.amount, Value: "50", minimumSpent: 300, usageLimitPerPerson: 5, validFrom: new Date("2025-01-01"), ValidTill: new Date("2025-12-31") },
+    ];
     const customer = await prisma.customerProfile.findFirst();
     const product = await prisma.product.findFirst();
     if (customer && product) {
@@ -89,9 +158,7 @@ async function main() {
                 shippingCost: 50,
                 taxAmount: 18,
                 discountAmount: 0,
-                CustomerProfile: {
-                    connect: { id: customer.id },
-                },
+                CustomerProfile: { connect: { id: customer.id } },
                 items: {
                     create: [
                         {

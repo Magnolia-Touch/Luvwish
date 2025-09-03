@@ -98,7 +98,9 @@ let ProductsService = class ProductsService {
         });
     }
     async remove(id) {
-        await this.findOne(id);
+        if (!(await this.prisma.product.findUnique({ where: { id } }))) {
+            throw new common_1.NotFoundException(`Product with ID ${id} not found`);
+        }
         return this.prisma.product.delete({ where: { id } });
     }
 };

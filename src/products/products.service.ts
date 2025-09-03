@@ -107,7 +107,9 @@ export class ProductsService {
 
   // 🔹 Delete product
   async remove(id: string) {
-    await this.findOne(id); // ensure product exists
+    if (!(await this.prisma.product.findUnique({ where: { id } }))) {
+      throw new NotFoundException(`Product with ID ${id} not found`);
+    }
     return this.prisma.product.delete({ where: { id } });
   }
 }

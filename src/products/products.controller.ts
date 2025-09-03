@@ -20,7 +20,7 @@ import { SearchFilterDto } from 'src/pagination/dto/search-filter.dto';
 
 @Controller('products')
 export class ProductsController {
-  constructor(private readonly productsService: ProductsService) {}
+  constructor(private readonly productsService: ProductsService) { }
 
   // 🔹 Create product with images
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -52,7 +52,6 @@ export class ProductsController {
 
   // 🔹 Delete product
   // 🔹 Update product (with images)
-  @Patch(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
