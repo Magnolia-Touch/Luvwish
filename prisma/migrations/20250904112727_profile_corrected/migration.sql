@@ -14,13 +14,13 @@ CREATE TABLE `users` (
 -- CreateTable
 CREATE TABLE `CustomerProfile` (
     `id` VARCHAR(191) NOT NULL,
-    `name` VARCHAR(191) NOT NULL,
+    `name` VARCHAR(191) NULL,
     `phone` VARCHAR(191) NULL,
-    `address` VARCHAR(191) NOT NULL,
-    `city` VARCHAR(191) NOT NULL,
-    `state` VARCHAR(191) NOT NULL,
-    `postalCode` VARCHAR(191) NOT NULL,
-    `country` VARCHAR(191) NOT NULL,
+    `address` VARCHAR(191) NULL,
+    `city` VARCHAR(191) NULL,
+    `state` VARCHAR(191) NULL,
+    `postalCode` VARCHAR(191) NULL,
+    `country` VARCHAR(191) NULL,
     `profile_picture` VARCHAR(191) NULL,
     `userId` VARCHAR(191) NOT NULL,
 
@@ -31,7 +31,7 @@ CREATE TABLE `CustomerProfile` (
 -- CreateTable
 CREATE TABLE `AdminProfile` (
     `id` VARCHAR(191) NOT NULL,
-    `name` VARCHAR(191) NOT NULL,
+    `name` VARCHAR(191) NULL,
     `phone` VARCHAR(191) NULL,
     `profile_picture` VARCHAR(191) NULL,
     `userId` VARCHAR(191) NOT NULL,
@@ -86,8 +86,8 @@ CREATE TABLE `product_images` (
 -- CreateTable
 CREATE TABLE `cart_items` (
     `id` VARCHAR(191) NOT NULL,
-    `productId` VARCHAR(191) NOT NULL,
-    `quantity` INTEGER NOT NULL,
+    `productId` VARCHAR(191) NULL,
+    `quantity` INTEGER NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
     `customerProfileId` VARCHAR(191) NULL,
@@ -218,7 +218,7 @@ CREATE TABLE `CouponUsage` (
 CREATE TABLE `wishlist` (
     `id` VARCHAR(191) NOT NULL,
     `customerProfileId` VARCHAR(191) NOT NULL,
-    `productId` VARCHAR(191) NOT NULL,
+    `productId` VARCHAR(191) NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 

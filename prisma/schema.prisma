@@ -68,13 +68,13 @@ model User {
 
 model CustomerProfile {
   id             String  @id @default(uuid())
-  name           String  @map("name")
+  name           String?  @map("name")
   phone          String? @map("phone")
-  address        String
-  city           String
-  state          String
-  postalCode     String
-  country        String
+  address        String?
+  city           String?
+  state          String?
+  postalCode     String?
+  country        String?
   profilePicture String? @map("profile_picture")
   userId         String  @unique
   user           User    @relation(fields: [userId], references: [id])
@@ -90,7 +90,7 @@ model CustomerProfile {
 
 model AdminProfile {
   id             String  @id @default(uuid())
-  name           String  @map("name")
+  name           String?  @map("name")
   phone          String? @map("phone")
   profilePicture String? @map("profile_picture")
   userId         String  @unique
@@ -148,12 +148,12 @@ model ProductImage {
 
 model CartItem {
   id        String   @id @default(uuid())
-  productId String
-  quantity  Int
+  productId String?
+  quantity  Int?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  product           Product          @relation(fields: [productId], references: [id], onDelete: Cascade)
+  product           Product?          @relation(fields: [productId], references: [id], onDelete: Cascade)
   CustomerProfile   CustomerProfile? @relation(fields: [customerProfileId], references: [id])
   customerProfileId String?
 
@@ -287,11 +287,11 @@ model CouponUsage {
 model Wishlist {
   id                String   @id @default(uuid())
   customerProfileId String
-  productId         String
+  productId         String?
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
-  product         Product         @relation(fields: [productId], references: [id], onDelete: Cascade)
+  product         Product?         @relation(fields: [productId], references: [id], onDelete: Cascade)
   customerProfile CustomerProfile @relation(fields: [customerProfileId], references: [id], onDelete: Cascade)
 
   @@unique([customerProfileId, productId]) // Prevent duplicates

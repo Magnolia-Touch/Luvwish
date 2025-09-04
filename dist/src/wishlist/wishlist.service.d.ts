@@ -22,7 +22,7 @@ export declare class WishlistService {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        productId: string;
+        productId: string | null;
         customerProfileId: string;
     }>;
     getWishlist(userId: string, pagination: PaginationDto): Promise<PaginationResponseDto<{
@@ -42,14 +42,14 @@ export declare class WishlistService {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        productId: string;
+        productId: string | null;
         customerProfileId: string;
     }>>;
     removeFromWishlist(id: string, userId: string): Promise<{
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        productId: string;
+        productId: string | null;
         customerProfileId: string;
     }>;
     clearWishlist(userId: string): Promise<import(".prisma/client").Prisma.BatchPayload>;

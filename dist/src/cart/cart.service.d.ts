@@ -34,17 +34,17 @@ export declare class CartService {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        productId: string;
+        productId: string | null;
         customerProfileId: string | null;
-        quantity: number;
+        quantity: number | null;
     })[]>;
     updateCartItem(userId: string, cartItemId: string, updateCartDto: UpdateCartDto): Promise<{
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        productId: string;
+        productId: string | null;
         customerProfileId: string | null;
-        quantity: number;
+        quantity: number | null;
     }>;
     removeFromCart(userId: string, cartItemId: string): Promise<{
         message: string;

@@ -6,6 +6,18 @@ export declare class UsersService {
     private readonly prisma;
     constructor(prisma: PrismaService);
     createCustomer(createUserDto: CreateUserDto): Promise<{
+        CustomerProfile: {
+            id: string;
+            name: string | null;
+            phone: string | null;
+            address: string | null;
+            city: string | null;
+            state: string | null;
+            postalCode: string | null;
+            country: string | null;
+            profilePicture: string | null;
+            userId: string;
+        };
         id: string;
         email: string;
         role: import(".prisma/client").$Enums.Roles;
@@ -90,9 +102,9 @@ export declare class UsersService {
                 id: string;
                 createdAt: Date;
                 updatedAt: Date;
-                productId: string;
+                productId: string | null;
                 customerProfileId: string | null;
-                quantity: number;
+                quantity: number | null;
             }[];
         };
     }>;
@@ -166,9 +178,9 @@ export declare class UsersService {
                 id: string;
                 createdAt: Date;
                 updatedAt: Date;
-                productId: string;
+                productId: string | null;
                 customerProfileId: string | null;
-                quantity: number;
+                quantity: number | null;
             }[];
         };
     }>;
@@ -177,25 +189,25 @@ export declare class UsersService {
     }>;
     createCustomerProfile(userId: string, data: UpdateCustomerProfileDto, profilePicture?: Express.Multer.File): Promise<{
         id: string;
-        name: string;
+        name: string | null;
         phone: string | null;
-        address: string;
-        city: string;
-        state: string;
-        postalCode: string;
-        country: string;
+        address: string | null;
+        city: string | null;
+        state: string | null;
+        postalCode: string | null;
+        country: string | null;
         profilePicture: string | null;
         userId: string;
     }>;
     updateCustomerProfile(userId: string, data: UpdateCustomerProfileDto, profilePicture?: Express.Multer.File): Promise<{
         id: string;
-        name: string;
+        name: string | null;
         phone: string | null;
-        address: string;
-        city: string;
-        state: string;
-        postalCode: string;
-        country: string;
+        address: string | null;
+        city: string | null;
+        state: string | null;
+        postalCode: string | null;
+        country: string | null;
         profilePicture: string | null;
         userId: string;
     }>;

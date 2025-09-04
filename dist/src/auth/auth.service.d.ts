@@ -150,9 +150,9 @@ export declare class AuthService {
                 id: string;
                 createdAt: Date;
                 updatedAt: Date;
-                productId: string;
+                productId: string | null;
                 customerProfileId: string | null;
-                quantity: number;
+                quantity: number | null;
             }[];
         };
     }>;

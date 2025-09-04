@@ -20,7 +20,7 @@ export class AuthService {
     private readonly prisma: PrismaService,
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
-  ) {}
+  ) { }
 
   async validateUser(email: string, password: string): Promise<any> {
     const user = await this.prisma.user.findUnique({
@@ -150,9 +150,7 @@ export class AuthService {
   }
 
   async getCustomerProfile(id: string, role: string) {
-    if (role === Roles.DELIVERY) {
-      throw new ForbiddenException('Profile cannot be accessed');
-    }
+
     return this.usersService.CutomerProfile(id);
   }
 }

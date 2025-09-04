@@ -34,17 +34,17 @@ export declare class CartController {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        productId: string;
+        productId: string | null;
         customerProfileId: string | null;
-        quantity: number;
+        quantity: number | null;
     })[]>;
     updateCart(req: any, id: string, updateCartDto: UpdateCartDto): Promise<{
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        productId: string;
+        productId: string | null;
         customerProfileId: string | null;
-        quantity: number;
+        quantity: number | null;
     }>;
     removeFromCart(req: any, id: string): Promise<{
         message: string;

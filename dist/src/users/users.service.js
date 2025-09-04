@@ -31,9 +31,23 @@ let UsersService = class UsersService {
                 email,
                 password: hashedPassword,
                 role: client_1.Roles.CUSTOMER,
+                CustomerProfile: {
+                    create: {}
+                }
             },
+            include: { CustomerProfile: true },
         });
         const { password: _, ...result } = user;
+        const cart = await this.prisma.cartItem.create({
+            data: {
+                customerProfileId: user.CustomerProfile.id
+            },
+        });
+        const wishlist = await this.prisma.wishlist.create({
+            data: {
+                customerProfileId: user.CustomerProfile.id,
+            },
+        });
         return result;
     }
     async createAdmin(createUserDto) {
@@ -49,6 +63,9 @@ let UsersService = class UsersService {
                 email,
                 password: hashedPassword,
                 role: client_1.Roles.ADMIN,
+                AdminProfile: {
+                    create: {}
+                }
             },
         });
         const { password: _, ...result } = user;

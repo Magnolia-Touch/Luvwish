@@ -13,7 +13,7 @@ import { ChangePasswordDto } from './dto/change-password.dto';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   async createCustomer(createUserDto: CreateUserDto) {
     const { email, password } = createUserDto;
@@ -27,9 +27,26 @@ export class UsersService {
         email,
         password: hashedPassword,
         role: Roles.CUSTOMER, // enforce CUSTOMER
+        CustomerProfile: {
+          create: {}
+        }
       },
+      include: { CustomerProfile: true },
     });
     const { password: _, ...result } = user;
+
+    const cart = await this.prisma.cartItem.create({
+      data: {
+        customerProfileId: user.CustomerProfile.id
+      },
+    });
+
+    const wishlist = await this.prisma.wishlist.create({
+      data: {
+        customerProfileId: user.CustomerProfile.id,
+      },
+    });
+
     return result;
   }
 
@@ -40,12 +57,14 @@ export class UsersService {
     });
     if (existingUser) throw new ConflictException('Email already in use');
     const hashedPassword = password ? await bcrypt.hash(password, 10) : null;
-
     const user = await this.prisma.user.create({
       data: {
         email,
         password: hashedPassword,
         role: Roles.ADMIN, // enforce ADMIN
+        AdminProfile: {
+          create: {}
+        }
       },
     });
     const { password: _, ...result } = user;
