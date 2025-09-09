@@ -141,9 +141,6 @@ let AuthService = class AuthService {
         return this.usersService.AdminProfile(id);
     }
     async getCustomerProfile(id, role) {
-        if (role === client_1.Roles.DELIVERY) {
-            throw new common_1.ForbiddenException('Profile cannot be accessed');
-        }
         return this.usersService.CutomerProfile(id);
     }
 };
