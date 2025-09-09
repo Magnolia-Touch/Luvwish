@@ -68,7 +68,7 @@ model User {
 
 model CustomerProfile {
   id             String  @id @default(uuid())
-  name           String?  @map("name")
+  name           String? @map("name")
   phone          String? @map("phone")
   address        String?
   city           String?
@@ -90,7 +90,7 @@ model CustomerProfile {
 
 model AdminProfile {
   id             String  @id @default(uuid())
-  name           String?  @map("name")
+  name           String? @map("name")
   phone          String? @map("phone")
   profilePicture String? @map("profile_picture")
   userId         String  @unique
@@ -153,7 +153,7 @@ model CartItem {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  product           Product?          @relation(fields: [productId], references: [id], onDelete: Cascade)
+  product           Product?         @relation(fields: [productId], references: [id], onDelete: Cascade)
   CustomerProfile   CustomerProfile? @relation(fields: [customerProfileId], references: [id])
   customerProfileId String?
 
@@ -261,7 +261,7 @@ model Review {
 
 model Coupon {
   id                  String           @id @default(uuid())
-  couponName          String          
+  couponName          String
   ValueType           CoupounValueType @default(amount)
   Value               String
   minimumSpent        Decimal          @default(0) @db.Decimal(10, 2)
@@ -291,7 +291,7 @@ model Wishlist {
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
-  product         Product?         @relation(fields: [productId], references: [id], onDelete: Cascade)
+  product         Product?        @relation(fields: [productId], references: [id], onDelete: Cascade)
   customerProfile CustomerProfile @relation(fields: [customerProfileId], references: [id], onDelete: Cascade)
 
   @@unique([customerProfileId, productId]) // Prevent duplicates
