@@ -30,13 +30,13 @@ let CartController = class CartController {
         const profile_id = req.user.id;
         return this.cartService.getCart(profile_id);
     }
-    async updateCart(req, id, updateCartDto) {
+    async updateCart(req, cartItemId, updateCartDto) {
         const profile_id = req.user.id;
-        return this.cartService.updateCartItem(profile_id, id, updateCartDto);
+        return this.cartService.updateCartItem(profile_id, cartItemId, updateCartDto);
     }
-    async removeFromCart(req, id) {
+    async removeFromCart(req, cartItemId) {
         const profile_id = req.user.id;
-        return this.cartService.removeFromCart(profile_id, id);
+        return this.cartService.RemoveFromCart(profile_id, cartItemId);
     }
 };
 exports.CartController = CartController;
@@ -59,7 +59,7 @@ __decorate([
 ], CartController.prototype, "getCart", null);
 __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    (0, common_1.Patch)(':id'),
+    (0, common_1.Patch)('add-to-cart/:id'),
     __param(0, (0, common_1.Request)()),
     __param(1, (0, common_1.Param)('id')),
     __param(2, (0, common_1.Body)()),
@@ -69,7 +69,7 @@ __decorate([
 ], CartController.prototype, "updateCart", null);
 __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    (0, common_1.Delete)(':id'),
+    (0, common_1.Patch)('remove-from-cart/:id'),
     __param(0, (0, common_1.Request)()),
     __param(1, (0, common_1.Param)('id')),
     __metadata("design:type", Function),

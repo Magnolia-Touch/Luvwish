@@ -18,7 +18,7 @@ import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 @Controller('cart')
 @UseGuards(JwtAuthGuard)
 export class CartController {
-  constructor(private readonly cartService: CartService) {}
+  constructor(private readonly cartService: CartService) { }
 
   @UseGuards(JwtAuthGuard)
   @Post('add')
@@ -35,20 +35,20 @@ export class CartController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Patch(':id')
+  @Patch('add-to-cart/:id')
   async updateCart(
     @Request() req,
-    @Param('id') id: string,
+    @Param('id') cartItemId: string,
     @Body() updateCartDto: UpdateCartDto,
   ) {
     const profile_id = req.user.id;
-    return this.cartService.updateCartItem(profile_id, id, updateCartDto);
+    return this.cartService.updateCartItem(profile_id, cartItemId, updateCartDto);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Delete(':id')
-  async removeFromCart(@Request() req, @Param('id') id: string) {
+  @Patch('remove-from-cart/:id')
+  async removeFromCart(@Request() req, @Param('id') cartItemId: string) {
     const profile_id = req.user.id;
-    return this.cartService.removeFromCart(profile_id, id);
+    return this.cartService.RemoveFromCart(profile_id, cartItemId);
   }
 }

@@ -46,7 +46,14 @@ export declare class CartService {
         customerProfileId: string | null;
         quantity: number | null;
     }>;
-    removeFromCart(userId: string, cartItemId: string): Promise<{
+    RemoveFromCart(userId: string, cartItemId: string): Promise<{
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        productId: string | null;
+        customerProfileId: string | null;
+        quantity: number | null;
+    } | {
         message: string;
     }>;
 }

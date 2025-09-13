@@ -83,10 +83,13 @@ let CartService = class CartService {
         });
         if (!customerProfile)
             throw new common_1.NotFoundException('Customer profile not found');
-        const cartItem = await this.prisma.cartItem.findUnique({
-            where: { id: cartItemId },
+        const cart = await this.prisma.cartItem.findFirst({
+            where: {
+                customerProfileId: customerProfile.id,
+                id: cartItemId
+            },
         });
-        if (!cartItem || cartItem.customerProfileId !== customerProfile.id) {
+        if (!cart) {
             throw new common_1.NotFoundException('Cart item not found');
         }
         if (updateCartDto.quantity && updateCartDto.quantity <= 0) {
@@ -97,20 +100,33 @@ let CartService = class CartService {
             data: { ...updateCartDto },
         });
     }
-    async removeFromCart(userId, cartItemId) {
-        const customerProfile = await this.prisma.customerProfile.findUnique({
+    async RemoveFromCart(userId, cartItemId) {
+        const customerprofile = await this.prisma.customerProfile.findUnique({
             where: { userId },
         });
-        if (!customerProfile)
+        if (!customerprofile) {
             throw new common_1.NotFoundException('Customer profile not found');
-        const cartItem = await this.prisma.cartItem.findUnique({
-            where: { id: cartItemId },
+        }
+        const cart = await this.prisma.cartItem.findFirst({
+            where: {
+                customerProfileId: customerprofile.id,
+                id: cartItemId,
+            },
         });
-        if (!cartItem || cartItem.customerProfileId !== customerProfile.id) {
+        if (!cart) {
             throw new common_1.NotFoundException('Cart item not found');
         }
-        await this.prisma.cartItem.delete({ where: { id: cartItemId } });
-        return { message: 'Item removed from cart successfully' };
+        const newQuantity = cart.quantity - 1;
+        if (newQuantity > 0) {
+            return this.prisma.cartItem.update({
+                where: { id: cart.id },
+                data: { quantity: newQuantity },
+            });
+        }
+        else {
+            await this.prisma.cartItem.delete({ where: { id: cart.id } });
+            return { message: 'Item removed from cart successfully' };
+        }
     }
 };
 exports.CartService = CartService;
