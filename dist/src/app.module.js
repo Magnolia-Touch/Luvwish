@@ -20,6 +20,7 @@ const razorpay_module_1 = require("./razorpay/razorpay.module");
 const coupouns_module_1 = require("./coupouns/coupouns.module");
 const notifications_module_1 = require("./firebase/notifications.module");
 const wishlist_module_1 = require("./wishlist/wishlist.module");
+const bank_details_module_1 = require("./bank-details/bank-details.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -40,6 +41,7 @@ exports.AppModule = AppModule = __decorate([
             coupouns_module_1.CouponModule,
             notifications_module_1.NotificationsModule,
             wishlist_module_1.WishlistModule,
+            bank_details_module_1.BankDetailsModule,
             razorpay_module_1.RazorpayModule.forRootAsync(),
         ],
     })

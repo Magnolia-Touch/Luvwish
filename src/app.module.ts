@@ -12,6 +12,7 @@ import { RazorpayModule } from './razorpay/razorpay.module';
 import { CouponModule } from './coupouns/coupouns.module';
 import { NotificationsModule } from './firebase/notifications.module';
 import { WishlistModule } from './wishlist/wishlist.module';
+import { BankDetailsModule } from './bank-details/bank-details.module';
 
 @Module({
   imports: [
@@ -29,8 +30,9 @@ import { WishlistModule } from './wishlist/wishlist.module';
     CouponModule,
     NotificationsModule,
     WishlistModule,
+    BankDetailsModule,
 
     RazorpayModule.forRootAsync(),
   ],
 })
-export class AppModule {}
+export class AppModule { }
