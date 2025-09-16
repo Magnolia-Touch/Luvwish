@@ -41,8 +41,10 @@ export class CartService {
         },
       },
     });
-    if (existingCartItem.quantity + quantity > product.stockCount) {
-      throw new BadRequestException('Insufficient stock available');
+    if (existingCartItem) {
+      if (existingCartItem.quantity + quantity > product.stockCount) {
+        throw new BadRequestException('Insufficient stock available');
+      }
     }
     let cartItem;
     if (existingCartItem) {
