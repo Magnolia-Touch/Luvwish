@@ -102,6 +102,7 @@ export declare class AuthController {
                 address: string;
                 city: string;
                 state: string;
+                landmark: string | null;
                 postalCode: string;
                 country: string;
                 customerProfileId: string | null;
@@ -148,25 +149,27 @@ export declare class AuthController {
             }[];
         };
     }>;
-    createProfile(req: any, data: UpdateCustomerProfileDto, image?: Express.Multer.File): Promise<{
+    createProfile(req: any, data: UpdateCustomerProfileDto): Promise<{
         id: string;
         name: string | null;
         phone: string | null;
         address: string | null;
         city: string | null;
         state: string | null;
+        landmark: string | null;
         postalCode: string | null;
         country: string | null;
         profilePicture: string | null;
         userId: string;
     }>;
-    updateProfile(req: any, data: UpdateCustomerProfileDto, image?: Express.Multer.File): Promise<{
+    updateProfile(req: any, data: UpdateCustomerProfileDto): Promise<{
         id: string;
         name: string | null;
         phone: string | null;
         address: string | null;
         city: string | null;
         state: string | null;
+        landmark: string | null;
         postalCode: string | null;
         country: string | null;
         profilePicture: string | null;

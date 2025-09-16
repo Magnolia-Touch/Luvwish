@@ -179,13 +179,12 @@ let UsersService = class UsersService {
                 state: state || '',
                 postalCode: postalCode || '',
                 country: country || '',
-                profilePicture: profilepic,
+                profilePicture: profilepic || '',
             },
         });
     }
-    async updateCustomerProfile(userId, data, profilePicture) {
-        const { name, phone, address, city, state, postalCode, country } = data;
-        const profilepic = profilePicture ? profilePicture.path : undefined;
+    async updateCustomerProfile(userId, data) {
+        const { name, phone, address, city, state, postalCode, country, profilePicture } = data;
         const profile = await this.prisma.customerProfile.findUnique({
             where: { userId },
         });
@@ -202,7 +201,7 @@ let UsersService = class UsersService {
                 state: state ?? profile.state,
                 postalCode: postalCode ?? profile.postalCode,
                 country: country ?? profile.country,
-                profilePicture: profilepic ?? profile.profilePicture,
+                profilePicture: profilePicture ?? profile.profilePicture,
             },
         });
     }

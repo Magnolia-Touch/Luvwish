@@ -38,7 +38,7 @@ export declare class CartController {
         customerProfileId: string | null;
         quantity: number | null;
     })[]>;
-    updateCart(req: any, cartItemId: string, updateCartDto: UpdateCartDto): Promise<{
+    updateCart(req: any, updateCartDto: UpdateCartDto): Promise<{
         id: string;
         createdAt: Date;
         updatedAt: Date;
@@ -54,6 +54,9 @@ export declare class CartController {
         customerProfileId: string | null;
         quantity: number | null;
     } | {
+        message: string;
+    }>;
+    DeleteCart(req: any, cartItemId: string): Promise<{
         message: string;
     }>;
 }

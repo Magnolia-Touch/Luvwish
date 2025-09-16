@@ -110,6 +110,7 @@ export declare class AuthService {
                 address: string;
                 city: string;
                 state: string;
+                landmark: string | null;
                 postalCode: string;
                 country: string;
                 customerProfileId: string | null;

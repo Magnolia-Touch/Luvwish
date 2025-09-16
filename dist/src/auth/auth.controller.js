@@ -25,7 +25,6 @@ const roles_decorator_1 = require("../common/decorators/roles.decorator");
 const update_customer_profile_dto_1 = require("../users/dto/update-customer-profile.dto");
 const users_service_1 = require("../users/users.service");
 const change_password_dto_1 = require("../users/dto/change-password.dto");
-const platform_express_1 = require("@nestjs/platform-express");
 let AuthController = class AuthController {
     constructor(authService, userService) {
         this.authService = authService;
@@ -57,13 +56,13 @@ let AuthController = class AuthController {
         const role = req.user.role;
         return this.authService.getCustomerProfile(userId, role);
     }
-    async createProfile(req, data, image) {
+    async createProfile(req, data) {
         const userId = req.user.id;
-        return this.userService.createCustomerProfile(userId, data, image);
+        return this.userService.createCustomerProfile(userId, data);
     }
-    async updateProfile(req, data, image) {
+    async updateProfile(req, data) {
         const userId = req.user.id;
-        return this.userService.updateCustomerProfile(userId, data, image);
+        return this.userService.updateCustomerProfile(userId, data);
     }
     async changePassword(req, dto) {
         const userId = req.user.id;
@@ -127,23 +126,19 @@ __decorate([
 __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Post)('profile'),
-    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('image')),
     __param(0, (0, common_1.Request)()),
     __param(1, (0, common_1.Body)()),
-    __param(2, (0, common_1.UploadedFile)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, update_customer_profile_dto_1.UpdateCustomerProfileDto, Object]),
+    __metadata("design:paramtypes", [Object, update_customer_profile_dto_1.UpdateCustomerProfileDto]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "createProfile", null);
 __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Patch)('profile'),
-    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('image')),
     __param(0, (0, common_1.Request)()),
     __param(1, (0, common_1.Body)()),
-    __param(2, (0, common_1.UploadedFile)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, update_customer_profile_dto_1.UpdateCustomerProfileDto, Object]),
+    __metadata("design:paramtypes", [Object, update_customer_profile_dto_1.UpdateCustomerProfileDto]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "updateProfile", null);
 __decorate([

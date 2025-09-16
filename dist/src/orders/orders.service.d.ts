@@ -25,6 +25,7 @@ export declare class OrdersService {
             address: string;
             city: string;
             state: string;
+            landmark: string | null;
             postalCode: string;
             country: string;
             customerProfileId: string | null;
@@ -64,6 +65,7 @@ export declare class OrdersService {
             address: string;
             city: string;
             state: string;
+            landmark: string | null;
             postalCode: string;
             country: string;
             customerProfileId: string | null;
@@ -103,6 +105,7 @@ export declare class OrdersService {
             address: string;
             city: string;
             state: string;
+            landmark: string | null;
             postalCode: string;
             country: string;
             customerProfileId: string | null;
@@ -142,6 +145,7 @@ export declare class OrdersService {
             address: string;
             city: string;
             state: string;
+            landmark: string | null;
             postalCode: string;
             country: string;
             customerProfileId: string | null;
@@ -197,6 +201,7 @@ export declare class OrdersService {
             address: string;
             city: string;
             state: string;
+            landmark: string | null;
             postalCode: string;
             country: string;
             customerProfileId: string | null;
@@ -252,6 +257,7 @@ export declare class OrdersService {
             address: string;
             city: string;
             state: string;
+            landmark: string | null;
             postalCode: string;
             country: string;
             customerProfileId: string | null;

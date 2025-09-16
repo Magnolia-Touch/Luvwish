@@ -24,6 +24,10 @@ export class CreateAddressDto {
 
   @IsOptional()
   @IsString()
+  landmark?: string;
+
+  @IsOptional()
+  @IsString()
   phone?: string;
 
   @IsOptional()

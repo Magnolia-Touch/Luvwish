@@ -41,9 +41,10 @@ export class CartService {
         },
       },
     });
-
+    if (existingCartItem.quantity + quantity > product.stockCount) {
+      throw new BadRequestException('Insufficient stock available');
+    }
     let cartItem;
-
     if (existingCartItem) {
       // 4. Update quantity
       cartItem = await this.prisma.cartItem.update({
@@ -88,7 +89,6 @@ export class CartService {
 
   async updateCartItem(
     userId: string,
-    cartItemId: string,
     updateCartDto: UpdateCartDto,
   ) {
     const customerProfile = await this.prisma.customerProfile.findUnique({
@@ -96,11 +96,19 @@ export class CartService {
     });
     if (!customerProfile)
       throw new NotFoundException('Customer profile not found');
-
+    const product = await this.prisma.product.findFirst({
+      where: { id: updateCartDto.productId, isStock: true },
+    });
+    if (!product) {
+      throw new NotFoundException('Product not found or inactive');
+    }
+    if (product.stockCount < updateCartDto.quantity) {
+      throw new BadRequestException('Insufficient stock available');
+    }
     const cart = await this.prisma.cartItem.findFirst({
       where: {
         customerProfileId: customerProfile.id,
-        id: cartItemId
+        productId: updateCartDto.productId
       },
     });
     if (!cart) {
@@ -110,28 +118,29 @@ export class CartService {
       throw new BadRequestException('Quantity must be greater than zero');
     }
     return this.prisma.cartItem.update({
-      where: { id: cartItemId },
+      where: { id: cart.id },
       data: { ...updateCartDto },
     });
   }
 
-  // async DeleteFromCart(userId: string, cartItemId: string) {
-  //   const customerProfile = await this.prisma.customerProfile.findUnique({
-  //     where: { userId },
-  //   });
-  //   if (!customerProfile)
-  //     throw new NotFoundException('Customer profile not found');
+  async DeleteFromCart(userId: string, cartItemId: string) {
+    const customerProfile = await this.prisma.customerProfile.findUnique({
+      where: { userId },
+    });
+    if (!customerProfile)
+      throw new NotFoundException('Customer profile not found');
 
-  //   const cartItem = await this.prisma.cartItem.findUnique({
-  //     where: { id: cartItemId },
-  //   });
-  //   if (!cartItem || cartItem.customerProfileId !== customerProfile.id) {
-  //     throw new NotFoundException('Cart item not found');
-  //   }
+    const cartItem = await this.prisma.cartItem.findUnique({
+      where: { id: cartItemId },
+    });
+    if (!cartItem || cartItem.customerProfileId !== customerProfile.id) {
+      throw new NotFoundException('Cart item not found');
+    }
 
-  //   await this.prisma.cartItem.delete({ where: { id: cartItemId } });
-  //   return { message: 'Item removed from cart successfully' };
-  // }
+    await this.prisma.cartItem.delete({ where: { id: cartItemId } });
+    return { message: 'Item removed from cart successfully' };
+  }
+
 
   async RemoveFromCart(userId: string, cartItemId: string) {
     const customerprofile = await this.prisma.customerProfile.findUnique({

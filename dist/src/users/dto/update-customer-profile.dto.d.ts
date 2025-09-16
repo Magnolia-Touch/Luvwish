@@ -6,5 +6,6 @@ export declare class UpdateCustomerProfileDto {
     state?: string;
     postalCode?: string;
     country?: string;
+    landmark?: string;
     profilePicture?: string;
 }

@@ -38,13 +38,16 @@ export declare class CartService {
         customerProfileId: string | null;
         quantity: number | null;
     })[]>;
-    updateCartItem(userId: string, cartItemId: string, updateCartDto: UpdateCartDto): Promise<{
+    updateCartItem(userId: string, updateCartDto: UpdateCartDto): Promise<{
         id: string;
         createdAt: Date;
         updatedAt: Date;
         productId: string | null;
         customerProfileId: string | null;
         quantity: number | null;
+    }>;
+    DeleteFromCart(userId: string, cartItemId: string): Promise<{
+        message: string;
     }>;
     RemoveFromCart(userId: string, cartItemId: string): Promise<{
         id: string;

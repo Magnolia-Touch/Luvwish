@@ -73,6 +73,7 @@ model CustomerProfile {
   address        String?
   city           String?
   state          String?
+  landmark       String?
   postalCode     String?
   country        String?
   profilePicture String? @map("profile_picture")
@@ -223,6 +224,7 @@ model Address {
   city              String
   state             String
   postalCode        String
+  landmark          String?
   country           String
   phone             String?
   isDefault         Boolean  @default(false)

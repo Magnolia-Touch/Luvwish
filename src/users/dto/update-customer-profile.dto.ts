@@ -31,5 +31,10 @@ export class UpdateCustomerProfileDto {
 
   @IsOptional()
   @IsString()
+  landmark?: string;
+
+  @IsOptional()
+  @IsString()
   profilePicture?: string;
 }
+

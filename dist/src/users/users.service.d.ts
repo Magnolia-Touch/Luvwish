@@ -13,6 +13,7 @@ export declare class UsersService {
             address: string | null;
             city: string | null;
             state: string | null;
+            landmark: string | null;
             postalCode: string | null;
             country: string | null;
             profilePicture: string | null;
@@ -62,6 +63,7 @@ export declare class UsersService {
                 address: string;
                 city: string;
                 state: string;
+                landmark: string | null;
                 postalCode: string;
                 country: string;
                 customerProfileId: string | null;
@@ -138,6 +140,7 @@ export declare class UsersService {
                 address: string;
                 city: string;
                 state: string;
+                landmark: string | null;
                 postalCode: string;
                 country: string;
                 customerProfileId: string | null;
@@ -194,18 +197,20 @@ export declare class UsersService {
         address: string | null;
         city: string | null;
         state: string | null;
+        landmark: string | null;
         postalCode: string | null;
         country: string | null;
         profilePicture: string | null;
         userId: string;
     }>;
-    updateCustomerProfile(userId: string, data: UpdateCustomerProfileDto, profilePicture?: Express.Multer.File): Promise<{
+    updateCustomerProfile(userId: string, data: UpdateCustomerProfileDto): Promise<{
         id: string;
         name: string | null;
         phone: string | null;
         address: string | null;
         city: string | null;
         state: string | null;
+        landmark: string | null;
         postalCode: string | null;
         country: string | null;
         profilePicture: string | null;

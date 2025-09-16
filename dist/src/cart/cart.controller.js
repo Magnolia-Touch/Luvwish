@@ -30,13 +30,17 @@ let CartController = class CartController {
         const profile_id = req.user.id;
         return this.cartService.getCart(profile_id);
     }
-    async updateCart(req, cartItemId, updateCartDto) {
+    async updateCart(req, updateCartDto) {
         const profile_id = req.user.id;
-        return this.cartService.updateCartItem(profile_id, cartItemId, updateCartDto);
+        return this.cartService.updateCartItem(profile_id, updateCartDto);
     }
     async removeFromCart(req, cartItemId) {
         const profile_id = req.user.id;
         return this.cartService.RemoveFromCart(profile_id, cartItemId);
+    }
+    async DeleteCart(req, cartItemId) {
+        const profile_id = req.user.id;
+        return this.cartService.DeleteFromCart(profile_id, cartItemId);
     }
 };
 exports.CartController = CartController;
@@ -59,12 +63,11 @@ __decorate([
 ], CartController.prototype, "getCart", null);
 __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    (0, common_1.Patch)('add-to-cart/:id'),
+    (0, common_1.Patch)('update-cart'),
     __param(0, (0, common_1.Request)()),
-    __param(1, (0, common_1.Param)('id')),
-    __param(2, (0, common_1.Body)()),
+    __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String, update_cart_item_dto_1.UpdateCartDto]),
+    __metadata("design:paramtypes", [Object, update_cart_item_dto_1.UpdateCartDto]),
     __metadata("design:returntype", Promise)
 ], CartController.prototype, "updateCart", null);
 __decorate([
@@ -76,6 +79,15 @@ __decorate([
     __metadata("design:paramtypes", [Object, String]),
     __metadata("design:returntype", Promise)
 ], CartController.prototype, "removeFromCart", null);
+__decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Delete)('delete-cart/:id'),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:returntype", Promise)
+], CartController.prototype, "DeleteCart", null);
 exports.CartController = CartController = __decorate([
     (0, common_1.Controller)('cart'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),

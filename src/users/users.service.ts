@@ -176,6 +176,8 @@ export class UsersService {
 
     return { message: `User with ID ${id} deleted successfully` };
   }
+
+
   async createCustomerProfile(
     userId: string,
     data: UpdateCustomerProfileDto,
@@ -195,7 +197,7 @@ export class UsersService {
         state: state || '',
         postalCode: postalCode || '',
         country: country || '',
-        profilePicture: profilepic,
+        profilePicture: profilepic || '',
       },
     });
   }
@@ -203,11 +205,10 @@ export class UsersService {
   async updateCustomerProfile(
     userId: string,
     data: UpdateCustomerProfileDto,
-    profilePicture?: Express.Multer.File,
   ) {
-    const { name, phone, address, city, state, postalCode, country } = data;
+    const { name, phone, address, city, state, postalCode, country, profilePicture } = data;
 
-    const profilepic = profilePicture ? profilePicture.path : undefined;
+
 
     // Ensure profile exists
     const profile = await this.prisma.customerProfile.findUnique({
@@ -230,7 +231,7 @@ export class UsersService {
         state: state ?? profile.state,
         postalCode: postalCode ?? profile.postalCode,
         country: country ?? profile.country,
-        profilePicture: profilepic ?? profile.profilePicture,
+        profilePicture: profilePicture ?? profile.profilePicture,
       },
     });
   }

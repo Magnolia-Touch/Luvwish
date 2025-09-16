@@ -30,7 +30,7 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly userService: UsersService,
-  ) {}
+  ) { }
 
   @Post('login')
   async login(@Body() loginDto: LoginDto) {
@@ -80,26 +80,22 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Post('profile')
-  @UseInterceptors(FileInterceptor('image'))
   async createProfile(
     @Request() req,
     @Body() data: UpdateCustomerProfileDto,
-    @UploadedFile() image?: Express.Multer.File,
   ) {
     const userId = req.user.id;
-    return this.userService.createCustomerProfile(userId, data, image);
+    return this.userService.createCustomerProfile(userId, data);
   }
 
   @UseGuards(JwtAuthGuard)
   @Patch('profile')
-  @UseInterceptors(FileInterceptor('image'))
   async updateProfile(
     @Request() req,
     @Body() data: UpdateCustomerProfileDto,
-    @UploadedFile() image?: Express.Multer.File,
   ) {
     const userId = req.user.id;
-    return this.userService.updateCustomerProfile(userId, data, image);
+    return this.userService.updateCustomerProfile(userId, data);
   }
 
   @UseGuards(JwtAuthGuard)

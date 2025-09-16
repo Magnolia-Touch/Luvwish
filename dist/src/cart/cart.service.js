@@ -41,6 +41,9 @@ let CartService = class CartService {
                 },
             },
         });
+        if (existingCartItem.quantity + quantity > product.stockCount) {
+            throw new common_1.BadRequestException('Insufficient stock available');
+        }
         let cartItem;
         if (existingCartItem) {
             cartItem = await this.prisma.cartItem.update({
@@ -77,16 +80,25 @@ let CartService = class CartService {
             include: { product: { include: { images: true } } },
         });
     }
-    async updateCartItem(userId, cartItemId, updateCartDto) {
+    async updateCartItem(userId, updateCartDto) {
         const customerProfile = await this.prisma.customerProfile.findUnique({
             where: { userId },
         });
         if (!customerProfile)
             throw new common_1.NotFoundException('Customer profile not found');
+        const product = await this.prisma.product.findFirst({
+            where: { id: updateCartDto.productId, isStock: true },
+        });
+        if (!product) {
+            throw new common_1.NotFoundException('Product not found or inactive');
+        }
+        if (product.stockCount < updateCartDto.quantity) {
+            throw new common_1.BadRequestException('Insufficient stock available');
+        }
         const cart = await this.prisma.cartItem.findFirst({
             where: {
                 customerProfileId: customerProfile.id,
-                id: cartItemId
+                productId: updateCartDto.productId
             },
         });
         if (!cart) {
@@ -96,9 +108,24 @@ let CartService = class CartService {
             throw new common_1.BadRequestException('Quantity must be greater than zero');
         }
         return this.prisma.cartItem.update({
-            where: { id: cartItemId },
+            where: { id: cart.id },
             data: { ...updateCartDto },
         });
+    }
+    async DeleteFromCart(userId, cartItemId) {
+        const customerProfile = await this.prisma.customerProfile.findUnique({
+            where: { userId },
+        });
+        if (!customerProfile)
+            throw new common_1.NotFoundException('Customer profile not found');
+        const cartItem = await this.prisma.cartItem.findUnique({
+            where: { id: cartItemId },
+        });
+        if (!cartItem || cartItem.customerProfileId !== customerProfile.id) {
+            throw new common_1.NotFoundException('Cart item not found');
+        }
+        await this.prisma.cartItem.delete({ where: { id: cartItemId } });
+        return { message: 'Item removed from cart successfully' };
     }
     async RemoveFromCart(userId, cartItemId) {
         const customerprofile = await this.prisma.customerProfile.findUnique({

@@ -6,6 +6,7 @@ export declare class CreateAddressDto {
     state: string;
     postalCode: string;
     country: string;
+    landmark?: string;
     phone?: string;
     isDefault?: boolean;
 }
